@@ -1,0 +1,521 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AC1B01E41BC9A89200504FDE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E31BC9A89200504FDE /* main.m */; };
+		AC1B01E71BC9A89200504FDE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E61BC9A89200504FDE /* AppDelegate.m */; };
+		AC1B01EA1BC9A89200504FDE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E91BC9A89200504FDE /* ViewController.m */; };
+		AC1B01ED1BC9A89200504FDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC1B01EB1BC9A89200504FDE /* Main.storyboard */; };
+		AC1B01EF1BC9A89200504FDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC1B01EE1BC9A89200504FDE /* Assets.xcassets */; };
+		AC1B01F21BC9A89200504FDE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC1B01F01BC9A89200504FDE /* LaunchScreen.storyboard */; };
+		AC1B01FD1BC9A89200504FDE /* VoicepediaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01FC1BC9A89200504FDE /* VoicepediaTests.m */; };
+		AC1B02081BC9A89200504FDE /* VoicepediaUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B02071BC9A89200504FDE /* VoicepediaUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AC1B01F91BC9A89200504FDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC1B01D71BC9A89200504FDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC1B01DE1BC9A89200504FDE;
+			remoteInfo = Voicepedia;
+		};
+		AC1B02041BC9A89200504FDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC1B01D71BC9A89200504FDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC1B01DE1BC9A89200504FDE;
+			remoteInfo = Voicepedia;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AC1B01DF1BC9A89200504FDE /* Voicepedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Voicepedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC1B01E31BC9A89200504FDE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		AC1B01E51BC9A89200504FDE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		AC1B01E61BC9A89200504FDE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		AC1B01E81BC9A89200504FDE /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		AC1B01E91BC9A89200504FDE /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		AC1B01EC1BC9A89200504FDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AC1B01EE1BC9A89200504FDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AC1B01F11BC9A89200504FDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AC1B01F31BC9A89200504FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC1B01F81BC9A89200504FDE /* VoicepediaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoicepediaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC1B01FC1BC9A89200504FDE /* VoicepediaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VoicepediaTests.m; sourceTree = "<group>"; };
+		AC1B01FE1BC9A89200504FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC1B02031BC9A89200504FDE /* VoicepediaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoicepediaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC1B02071BC9A89200504FDE /* VoicepediaUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VoicepediaUITests.m; sourceTree = "<group>"; };
+		AC1B02091BC9A89200504FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC1B01DC1BC9A89200504FDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC1B01F51BC9A89200504FDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC1B02001BC9A89200504FDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AC1B01D61BC9A89200504FDE = {
+			isa = PBXGroup;
+			children = (
+				AC1B01E11BC9A89200504FDE /* Voicepedia */,
+				AC1B01FB1BC9A89200504FDE /* VoicepediaTests */,
+				AC1B02061BC9A89200504FDE /* VoicepediaUITests */,
+				AC1B01E01BC9A89200504FDE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AC1B01E01BC9A89200504FDE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC1B01DF1BC9A89200504FDE /* Voicepedia.app */,
+				AC1B01F81BC9A89200504FDE /* VoicepediaTests.xctest */,
+				AC1B02031BC9A89200504FDE /* VoicepediaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AC1B01E11BC9A89200504FDE /* Voicepedia */ = {
+			isa = PBXGroup;
+			children = (
+				AC1B01E51BC9A89200504FDE /* AppDelegate.h */,
+				AC1B01E61BC9A89200504FDE /* AppDelegate.m */,
+				AC1B01E81BC9A89200504FDE /* ViewController.h */,
+				AC1B01E91BC9A89200504FDE /* ViewController.m */,
+				AC1B01EB1BC9A89200504FDE /* Main.storyboard */,
+				AC1B01EE1BC9A89200504FDE /* Assets.xcassets */,
+				AC1B01F01BC9A89200504FDE /* LaunchScreen.storyboard */,
+				AC1B01F31BC9A89200504FDE /* Info.plist */,
+				AC1B01E21BC9A89200504FDE /* Supporting Files */,
+			);
+			path = Voicepedia;
+			sourceTree = "<group>";
+		};
+		AC1B01E21BC9A89200504FDE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AC1B01E31BC9A89200504FDE /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AC1B01FB1BC9A89200504FDE /* VoicepediaTests */ = {
+			isa = PBXGroup;
+			children = (
+				AC1B01FC1BC9A89200504FDE /* VoicepediaTests.m */,
+				AC1B01FE1BC9A89200504FDE /* Info.plist */,
+			);
+			path = VoicepediaTests;
+			sourceTree = "<group>";
+		};
+		AC1B02061BC9A89200504FDE /* VoicepediaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				AC1B02071BC9A89200504FDE /* VoicepediaUITests.m */,
+				AC1B02091BC9A89200504FDE /* Info.plist */,
+			);
+			path = VoicepediaUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AC1B01DE1BC9A89200504FDE /* Voicepedia */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC1B020C1BC9A89200504FDE /* Build configuration list for PBXNativeTarget "Voicepedia" */;
+			buildPhases = (
+				AC1B01DB1BC9A89200504FDE /* Sources */,
+				AC1B01DC1BC9A89200504FDE /* Frameworks */,
+				AC1B01DD1BC9A89200504FDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Voicepedia;
+			productName = Voicepedia;
+			productReference = AC1B01DF1BC9A89200504FDE /* Voicepedia.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AC1B01F71BC9A89200504FDE /* VoicepediaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC1B020F1BC9A89200504FDE /* Build configuration list for PBXNativeTarget "VoicepediaTests" */;
+			buildPhases = (
+				AC1B01F41BC9A89200504FDE /* Sources */,
+				AC1B01F51BC9A89200504FDE /* Frameworks */,
+				AC1B01F61BC9A89200504FDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC1B01FA1BC9A89200504FDE /* PBXTargetDependency */,
+			);
+			name = VoicepediaTests;
+			productName = VoicepediaTests;
+			productReference = AC1B01F81BC9A89200504FDE /* VoicepediaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AC1B02021BC9A89200504FDE /* VoicepediaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC1B02121BC9A89200504FDE /* Build configuration list for PBXNativeTarget "VoicepediaUITests" */;
+			buildPhases = (
+				AC1B01FF1BC9A89200504FDE /* Sources */,
+				AC1B02001BC9A89200504FDE /* Frameworks */,
+				AC1B02011BC9A89200504FDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC1B02051BC9A89200504FDE /* PBXTargetDependency */,
+			);
+			name = VoicepediaUITests;
+			productName = VoicepediaUITests;
+			productReference = AC1B02031BC9A89200504FDE /* VoicepediaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AC1B01D71BC9A89200504FDE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Michael Royzen";
+				TargetAttributes = {
+					AC1B01DE1BC9A89200504FDE = {
+						CreatedOnToolsVersion = 7.0.1;
+					};
+					AC1B01F71BC9A89200504FDE = {
+						CreatedOnToolsVersion = 7.0.1;
+						TestTargetID = AC1B01DE1BC9A89200504FDE;
+					};
+					AC1B02021BC9A89200504FDE = {
+						CreatedOnToolsVersion = 7.0.1;
+						TestTargetID = AC1B01DE1BC9A89200504FDE;
+					};
+				};
+			};
+			buildConfigurationList = AC1B01DA1BC9A89200504FDE /* Build configuration list for PBXProject "Voicepedia" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AC1B01D61BC9A89200504FDE;
+			productRefGroup = AC1B01E01BC9A89200504FDE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AC1B01DE1BC9A89200504FDE /* Voicepedia */,
+				AC1B01F71BC9A89200504FDE /* VoicepediaTests */,
+				AC1B02021BC9A89200504FDE /* VoicepediaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AC1B01DD1BC9A89200504FDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC1B01F21BC9A89200504FDE /* LaunchScreen.storyboard in Resources */,
+				AC1B01EF1BC9A89200504FDE /* Assets.xcassets in Resources */,
+				AC1B01ED1BC9A89200504FDE /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC1B01F61BC9A89200504FDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC1B02011BC9A89200504FDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC1B01DB1BC9A89200504FDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC1B01EA1BC9A89200504FDE /* ViewController.m in Sources */,
+				AC1B01E71BC9A89200504FDE /* AppDelegate.m in Sources */,
+				AC1B01E41BC9A89200504FDE /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC1B01F41BC9A89200504FDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC1B01FD1BC9A89200504FDE /* VoicepediaTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC1B01FF1BC9A89200504FDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC1B02081BC9A89200504FDE /* VoicepediaUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AC1B01FA1BC9A89200504FDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC1B01DE1BC9A89200504FDE /* Voicepedia */;
+			targetProxy = AC1B01F91BC9A89200504FDE /* PBXContainerItemProxy */;
+		};
+		AC1B02051BC9A89200504FDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC1B01DE1BC9A89200504FDE /* Voicepedia */;
+			targetProxy = AC1B02041BC9A89200504FDE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		AC1B01EB1BC9A89200504FDE /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AC1B01EC1BC9A89200504FDE /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		AC1B01F01BC9A89200504FDE /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AC1B01F11BC9A89200504FDE /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AC1B020A1BC9A89200504FDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		AC1B020B1BC9A89200504FDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AC1B020D1BC9A89200504FDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Voicepedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mlab-Technologies.Voicepedia";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AC1B020E1BC9A89200504FDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Voicepedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mlab-Technologies.Voicepedia";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		AC1B02101BC9A89200504FDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = VoicepediaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mlab-Technologies.VoicepediaTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Voicepedia.app/Voicepedia";
+			};
+			name = Debug;
+		};
+		AC1B02111BC9A89200504FDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = VoicepediaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mlab-Technologies.VoicepediaTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Voicepedia.app/Voicepedia";
+			};
+			name = Release;
+		};
+		AC1B02131BC9A89200504FDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = VoicepediaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mlab-Technologies.VoicepediaUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Voicepedia;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		AC1B02141BC9A89200504FDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = VoicepediaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mlab-Technologies.VoicepediaUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Voicepedia;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AC1B01DA1BC9A89200504FDE /* Build configuration list for PBXProject "Voicepedia" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC1B020A1BC9A89200504FDE /* Debug */,
+				AC1B020B1BC9A89200504FDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC1B020C1BC9A89200504FDE /* Build configuration list for PBXNativeTarget "Voicepedia" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC1B020D1BC9A89200504FDE /* Debug */,
+				AC1B020E1BC9A89200504FDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		AC1B020F1BC9A89200504FDE /* Build configuration list for PBXNativeTarget "VoicepediaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC1B02101BC9A89200504FDE /* Debug */,
+				AC1B02111BC9A89200504FDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		AC1B02121BC9A89200504FDE /* Build configuration list for PBXNativeTarget "VoicepediaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC1B02131BC9A89200504FDE /* Debug */,
+				AC1B02141BC9A89200504FDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AC1B01D71BC9A89200504FDE /* Project object */;
+}
