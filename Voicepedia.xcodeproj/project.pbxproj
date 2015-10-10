@@ -21,6 +21,7 @@
 		ACC80D011BC9B07000BA7229 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D001BC9B07000BA7229 /* QuartzCore.framework */; };
 		ACC80D031BC9B07700BA7229 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D021BC9B07700BA7229 /* SystemConfiguration.framework */; };
 		ACC80D051BC9B08B00BA7229 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */; };
+		ACC80D081BC9B17900BA7229 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC80D071BC9B17900BA7229 /* GradientView.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,8 @@
 		ACC80D001BC9B07000BA7229 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		ACC80D021BC9B07700BA7229 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		ACC80D061BC9B17900BA7229 /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientView.h; sourceTree = "<group>"; };
+		ACC80D071BC9B17900BA7229 /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 				AC1B01E61BC9A89200504FDE /* AppDelegate.m */,
 				AC1B01E81BC9A89200504FDE /* ViewController.h */,
 				AC1B01E91BC9A89200504FDE /* ViewController.m */,
+				ACC80D061BC9B17900BA7229 /* GradientView.h */,
+				ACC80D071BC9B17900BA7229 /* GradientView.m */,
 				AC1B01EB1BC9A89200504FDE /* Main.storyboard */,
 				AC1B01EE1BC9A89200504FDE /* Assets.xcassets */,
 				AC1B01F01BC9A89200504FDE /* LaunchScreen.storyboard */,
@@ -296,6 +301,7 @@
 			files = (
 				AC1B01EA1BC9A89200504FDE /* ViewController.m in Sources */,
 				AC1B01E71BC9A89200504FDE /* AppDelegate.m in Sources */,
+				ACC80D081BC9B17900BA7229 /* GradientView.m in Sources */,
 				AC1B01E41BC9A89200504FDE /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
