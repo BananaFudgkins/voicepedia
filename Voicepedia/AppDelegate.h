@@ -1,8 +1,8 @@
 //
 //  AppDelegate.h
-//  Voicepedia
+//  Voice Web Browser
 //
-//  Created by Michael Royzen on 10/10/15.
+//  Created by Michael Royzen on 10/9/15.
 //  Copyright © 2015 Michael Royzen. All rights reserved.
 //
 
