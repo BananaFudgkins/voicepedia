@@ -35,6 +35,18 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     [self.view addSubview:gradientView];
     [self.view sendSubviewToBack:gradientView];
     
+    // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    voiceSearch = nil;
+    shakeIndex = 0;
+    speakIndex = 1;
+    [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    readingSynthesizer = nil;
+    
     [SpeechKit setupWithID:@"NMDPTRIAL_mlabtechnologies20150120004933" host:@"sslsandbox.nmdp.nuancemobility.net" port:443 useSSL:YES delegate:self];
     
     NSDictionary *settings = @{AVSampleRateKey:          [NSNumber numberWithFloat: 44100.0],
@@ -65,12 +77,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     [self.waveformView setPrimaryWaveLineWidth:3.0f];
     [self.waveformView setSecondaryWaveLineWidth:1.0];
     
-    // Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
     [speechSynthesizer setDelegate:self];
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Welcome to Voicepedia.  Please speak your search term after the vibration."];
@@ -113,7 +120,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                                                detection:detectionType
                                                 language:@"en_US"
                                                 delegate:self];
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         
         [self.recorder prepareToRecord];
         [self.recorder setMeteringEnabled:YES];
@@ -135,6 +142,8 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                                                 language:@"en_US"
                                                 delegate:self];
         
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        
         [self.recorder prepareToRecord];
         [self.recorder setMeteringEnabled:YES];
         [self.recorder record];
@@ -143,8 +152,6 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         [self.waveformView setHidden:NO];
         
         [logoLabel setText:@"Listening"];
-        
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
     else if (speakIndex == 3) {
         /*
@@ -171,14 +178,14 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 
         speakIndex = 6;
 
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         [self.recorder stop];
         [self.waveformView setHidden:YES];
         [self.microphoneImage setHidden:NO];
         
         readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
         [readingSynthesizer setDelegate:self];
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"We will begin reading the article intro now.  Please shake the device to stop reading.              " stringByAppendingString:extract]];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"Please shake the device once to pause reading, and a second time to resume.  We will begin reading the article intro now.                                           " stringByAppendingString:extract]];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
         } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
@@ -187,62 +194,53 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         [readingSynthesizer speakUtterance:utterance];
     }
     else if (speakIndex == 6) {
-        readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
-        [readingSynthesizer setDelegate:self];
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"We have finished reading your article.  If you want to read another article, please shake the device."];
+        AVSpeechSynthesizer *synth = [[AVSpeechSynthesizer alloc] init];
+        [synth setDelegate:self];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"We have finished reading your article.  Please speak your new search term after the vibration."];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
         } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
             [utterance setRate:0.5];
         }
-        [readingSynthesizer speakUtterance:utterance];
-        speakIndex++;
+        [synth speakUtterance:utterance];
+        speakIndex = 1;
     }
 }
 
-- (void)restartSpeech {
-    speakIndex--;
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didPauseSpeechUtterance:(AVSpeechUtterance *)utterance {
+    NSLog(@"Speech Paused");
+    speakIndex = 8;
+    shakeIndex = 1;
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
     [speechSynthesizer setDelegate:self];
-    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Paused reading.  If you want to stop, say 'stop' after the vibration.  If you want to resume, shake the device again."];
+    AVSpeechUtterance *utterance2 = [[AVSpeechUtterance alloc]initWithString:@"Paused reading.  If you want to stop, say 'stop' after the vibration.  If you want to resume, shake the device again."];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
         [utterance setRate:0.1];
     } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
-        [utterance setRate:0.5];
+        [utterance2 setRate:0.5];
     }
-    [speechSynthesizer speakUtterance:utterance];
+    [speechSynthesizer speakUtterance:utterance2];
 }
 
-- (void)restart {
-    AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-    [speechSynthesizer setDelegate:self];
-    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Please speak your new search term after the vibration."];
-    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-        [utterance setRate:0.1];
-    } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
-        [utterance setRate:0.5];
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didContinueSpeechUtterance:(AVSpeechUtterance *)utterance {
+    NSLog(@"Speech continued");
+    if (speakIndex == 6) {
+        [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
     }
-    [speechSynthesizer speakUtterance:utterance];
-    speakIndex = 1;
 }
-
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion == UIEventSubtypeMotionShake) {
+        NSLog(@"Shake %d", shakeIndex);
         if (speakIndex == 6) {
-            [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
-            NSTimer *timer;
-            timer = [NSTimer timerWithTimeInterval:0.03 target:self selector:@selector(restartSpeech) userInfo:nil repeats:NO];
-            shakeIndex++;
+            [readingSynthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryWord];
             speakIndex++;
         }
-        if (shakeIndex == 1) {
+        else if (shakeIndex == 1) {
+            NSLog(@"ShakeIndex %d", shakeIndex);
             [readingSynthesizer continueSpeaking];
             shakeIndex--;
-        }
-        if (speakIndex == 7) {
-            NSTimer *timer;
-            timer = [NSTimer timerWithTimeInterval:0.03 target:self selector:@selector(restart) userInfo:nil repeats:NO];
+            speakIndex = 6;
         }
     }
 }
@@ -344,7 +342,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     
     if ([results firstResult] == nil) {
         NSLog(@"Fired %@", [results firstResult]);
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         [self.recorder stop];
         [self.microphoneImage setHidden:NO];
         [self.waveformView setHidden:YES];
@@ -360,7 +358,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         [speechSynthesizer speakUtterance:utterance];
     } else {
         if (speakIndex == 1) {
-            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
             [self.recorder stop];
             [self.microphoneImage setHidden:NO];
             [self.waveformView setHidden:YES];
@@ -378,7 +376,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             [speechSynthesizer speakUtterance:utterance];
         }
         else if (speakIndex == 2) {
-            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
             [self.recorder stop];
             [self.microphoneImage setHidden:NO];
             [self.waveformView setHidden:YES];
