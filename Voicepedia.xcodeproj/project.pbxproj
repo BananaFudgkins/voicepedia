@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AC519F1BC9FD6F00159581 /* SpeechKit.framework */; settings = {ASSET_TAGS = (); }; };
 		AC1B01E41BC9A89200504FDE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E31BC9A89200504FDE /* main.m */; };
 		AC1B01E71BC9A89200504FDE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E61BC9A89200504FDE /* AppDelegate.m */; };
 		AC1B01EA1BC9A89200504FDE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E91BC9A89200504FDE /* ViewController.m */; };
@@ -15,7 +16,6 @@
 		AC1B01F21BC9A89200504FDE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC1B01F01BC9A89200504FDE /* LaunchScreen.storyboard */; };
 		AC1B01FD1BC9A89200504FDE /* VoicepediaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01FC1BC9A89200504FDE /* VoicepediaTests.m */; };
 		AC1B02081BC9A89200504FDE /* VoicepediaUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B02071BC9A89200504FDE /* VoicepediaUITests.m */; };
-		ACC80CFB1BC9B04900BA7229 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80CFA1BC9B04900BA7229 /* SpeechKit.framework */; settings = {ASSET_TAGS = (); }; };
 		ACC80CFD1BC9B06400BA7229 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80CFC1BC9B06400BA7229 /* AVFoundation.framework */; };
 		ACC80CFF1BC9B06B00BA7229 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80CFE1BC9B06B00BA7229 /* CoreGraphics.framework */; };
 		ACC80D011BC9B07000BA7229 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D001BC9B07000BA7229 /* QuartzCore.framework */; };
@@ -42,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		68AC519F1BC9FD6F00159581 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechKit.framework; sourceTree = "<group>"; };
 		AC1B01DF1BC9A89200504FDE /* Voicepedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Voicepedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC1B01E31BC9A89200504FDE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AC1B01E51BC9A89200504FDE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -58,7 +59,6 @@
 		AC1B02031BC9A89200504FDE /* VoicepediaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoicepediaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC1B02071BC9A89200504FDE /* VoicepediaUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VoicepediaUITests.m; sourceTree = "<group>"; };
 		AC1B02091BC9A89200504FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ACC80CFA1BC9B04900BA7229 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechKit.framework; sourceTree = "<group>"; };
 		ACC80CFC1BC9B06400BA7229 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		ACC80CFE1BC9B06B00BA7229 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		ACC80D001BC9B07000BA7229 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -76,9 +76,9 @@
 				ACC80D051BC9B08B00BA7229 /* AudioToolbox.framework in Frameworks */,
 				ACC80D031BC9B07700BA7229 /* SystemConfiguration.framework in Frameworks */,
 				ACC80D011BC9B07000BA7229 /* QuartzCore.framework in Frameworks */,
+				68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */,
 				ACC80CFF1BC9B06B00BA7229 /* CoreGraphics.framework in Frameworks */,
 				ACC80CFD1BC9B06400BA7229 /* AVFoundation.framework in Frameworks */,
-				ACC80CFB1BC9B04900BA7229 /* SpeechKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,19 +99,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AC1B01D61BC9A89200504FDE = {
+		68AC519E1BC9FBE800159581 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68AC519F1BC9FD6F00159581 /* SpeechKit.framework */,
 				ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */,
 				ACC80D021BC9B07700BA7229 /* SystemConfiguration.framework */,
 				ACC80D001BC9B07000BA7229 /* QuartzCore.framework */,
 				ACC80CFE1BC9B06B00BA7229 /* CoreGraphics.framework */,
 				ACC80CFC1BC9B06400BA7229 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AC1B01D61BC9A89200504FDE = {
+			isa = PBXGroup;
+			children = (
 				AC1B01E11BC9A89200504FDE /* Voicepedia */,
 				AC1B01FB1BC9A89200504FDE /* VoicepediaTests */,
 				AC1B02061BC9A89200504FDE /* VoicepediaUITests */,
 				AC1B01E01BC9A89200504FDE /* Products */,
-				ACC80CFA1BC9B04900BA7229 /* SpeechKit.framework */,
+				68AC519E1BC9FBE800159581 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};

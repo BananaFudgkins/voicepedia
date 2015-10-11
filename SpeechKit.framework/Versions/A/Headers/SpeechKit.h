@@ -60,28 +60,84 @@ extern const unsigned char SpeechKitApplicationKey[];
  @param port The Nuance speech server port
  @param useSSL Whether or not SpeechKit should use SSL to
  communicate with the Nuance speech server
+ WARNING: We strongly encourage using SSL to make sure all transactions are
+ made on a secure socket.
  @param delegate The receiver for the setup message responses.  If the user
  wishes to destroy and re-connect to the SpeechKit servers, the delegate must
  implement the SpeechKitDelegate protocol and observe the destroyed method
  as described below.
  
- @discussion This method starts the necessary underlying components of the 
- SpeechKit framework.  Ensure that the SpeechKitApplicationKey variable 
- contains your application key prior to calling this method.  On calling this 
- method, a connection is established with the speech server and authorization 
- details are exchanged.  This provides the necessary setup to perform 
- recognitions and vocalizations.  In addition, having the established connection 
- results in improved response times for speech requests made soon after as the 
+ @discussion This method starts the necessary underlying components of the
+ SpeechKit framework.  Ensure that the SpeechKitApplicationKey variable
+ contains your application key prior to calling this method.  On calling this
+ method, a connection is established with the speech server and authorization
+ details are exchanged.  This provides the necessary setup to perform
+ recognitions and vocalizations.  In addition, having the established connection
+ results in improved response times for speech requests made soon after as the
  recorded audio can be sent without waiting for a connection.  Once the system
  has been initialized with this function, future calls to setupWithID will be
  ignored.  If you wish to connect to a different server or call this function
- again for any reason, you must call [SpeechKit destroy] and wait for the 
+ again for any reason, you must call [SpeechKit destroy] and wait for the
  destroyed delegate method to be called.
  */
-+ (void)setupWithID:(NSString*)ID 
-               host:(NSString*)host 
++ (void)setupWithID:(NSString*)ID
+               host:(NSString*)host
                port:(long)port
              useSSL:(BOOL)useSSL
+           delegate:(id <SpeechKitDelegate>)delegate;
+
+/*!
+ @abstract This method configures the SpeechKit subsystems.
+ 
+ @param ID Application identification
+ @param host The Nuance speech server hostname or IP address
+ @param port The Nuance speech server port
+ @param useSSL Whether or not SpeechKit should use SSL to
+ communicate with the Nuance speech server
+ WARNING: We strongly encourage using SSL to make sure all transactions are
+ made on a secure socket.
+ @param certSummary Certificate Summary could be nil, if non-nil, it should not be empty
+ This parameter is important to specify in order to prevent man-in-the-middle (MITM)
+ attack styles where the middle man has a valid certificate but different than the expected target.
+ The value of the string is a partial or fully-qualified domain name (FQDN) and may include a star (asterisk) for wildcard
+ certificates - exactly as specified in the CN field of the server X.509. (example: *.nuancemobility.net)
+ @param certData Certificate Data could be nil, if non-nil, it should not be empty
+ 
+ If this value is specified:
+ After standard certificate validity checks are complete, certificates in the chain of trust are byte-compared in sequence against this certificate
+ from the target server host (the tip of the chain of trust) back to the root CA, until the first match is found.
+ Any match means that the connection is allowed.  If none match, the connection is disallowed.
+ 
+ Therefore, this parameter can be used to either provide a strong target host check, or to "pin" the chain of trust to a specific root
+ or intermediate CA.  If the encoded certificate is a CA rather than the target server CN, it is important to also specify the sslSummary.
+ Otherwise, the sslSummary is redundant and not strictly necessary.
+ 
+ Since the encoded certificates contain validity dates and other items, certificate rotation 
+ needs should be considered in the client design when using this parameter.
+ @param delegate The receiver for the setup message responses.  If the user
+ wishes to destroy and re-connect to the SpeechKit servers, the delegate must
+ implement the SpeechKitDelegate protocol and observe the destroyed method
+ as described below.
+ 
+ @discussion This method starts the necessary underlying components of the
+ SpeechKit framework.  Ensure that the SpeechKitApplicationKey variable
+ contains your application key prior to calling this method.  On calling this
+ method, a connection is established with the speech server and authorization
+ details are exchanged.  This provides the necessary setup to perform
+ recognitions and vocalizations.  In addition, having the established connection
+ results in improved response times for speech requests made soon after as the
+ recorded audio can be sent without waiting for a connection.  Once the system
+ has been initialized with this function, future calls to setupWithID will be
+ ignored.  If you wish to connect to a different server or call this function
+ again for any reason, you must call [SpeechKit destroy] and wait for the
+ destroyed delegate method to be called.
+ */
++ (void)setupWithID:(NSString*)ID
+               host:(NSString*)host
+               port:(long)port
+             useSSL:(BOOL)useSSL
+        certSummary:(NSString*)certSummary
+           certData:(NSString*)certData
            delegate:(id <SpeechKitDelegate>)delegate;
 
 /*!
@@ -135,6 +191,14 @@ extern const unsigned char SpeechKitApplicationKey[];
 @protocol SpeechKitDelegate <NSObject>
 
 @optional
+
+/*!
+ @abstract Sent when the acquired iOS audio session is released.
+ 
+ @discussion This notifies the delegate that the acquired audio session has
+ been released.
+ */
+- (void)audioSessionReleased;
 
 /*!
  @abstract Sent when the destruction process is complete.
