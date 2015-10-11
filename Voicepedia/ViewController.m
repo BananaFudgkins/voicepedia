@@ -64,7 +64,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         AVSpeechUtterance *errorUtterance = [[AVSpeechUtterance alloc] initWithString:error.localizedDescription];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [errorUtterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
             [errorUtterance setRate:0.5];
         }
         [errorSynthesizer speakUtterance:errorUtterance];
@@ -83,7 +83,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Welcome to Voicepedia.  Please speak your search term after the vibration."];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
         [utterance setRate:0.1];
-    } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
         [utterance setRate:0.5];
     }
     [speechSynthesizer speakUtterance:utterance];
@@ -188,7 +188,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"Please shake the device once to pause reading, and a second time to resume.  We will begin reading the article intro now.                                           " stringByAppendingString:extract]];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
             [utterance setRate:0.5];
         }
         [readingSynthesizer speakUtterance:utterance];
@@ -199,7 +199,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"We have finished reading your article.  Please speak your new search term after the vibration."];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
             [utterance setRate:0.5];
         }
         [synth speakUtterance:utterance];
@@ -207,10 +207,12 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     }
 }
 
+
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didPauseSpeechUtterance:(AVSpeechUtterance *)utterance {
     NSLog(@"Speech Paused");
     speakIndex = 8;
     shakeIndex = 1;
+    /*
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
     [speechSynthesizer setDelegate:self];
     AVSpeechUtterance *utterance2 = [[AVSpeechUtterance alloc]initWithString:@"Paused reading.  If you want to stop, say 'stop' after the vibration.  If you want to resume, shake the device again."];
@@ -220,13 +222,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         [utterance2 setRate:0.5];
     }
     [speechSynthesizer speakUtterance:utterance2];
-}
-
-- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didContinueSpeechUtterance:(AVSpeechUtterance *)utterance {
-    NSLog(@"Speech continued");
-    if (speakIndex == 6) {
-        [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
-    }
+     */
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
@@ -260,7 +256,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:error.localizedDescription];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
         [utterance setRate:0.1];
-    } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
         [utterance setRate:0.5];
     }
     [speechSynthesizer speakUtterance:utterance];
@@ -352,7 +348,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
             [utterance setRate:0.5];
         }
         [speechSynthesizer speakUtterance:utterance];
@@ -370,7 +366,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"Do you want to search for %@", recognizedVoice]];
             if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                 [utterance setRate:0.1];
-            } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
                 [utterance setRate:0.5];
             }
             [speechSynthesizer speakUtterance:utterance];
@@ -390,7 +386,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 [self searchWikipedia];
                 if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
                     [utterance setRate:0.5];
                 }
                 [speechSynthesizer speakUtterance:utterance];
@@ -400,7 +396,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
                 [speechSynthesizer setDelegate:self];
                 AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't search for that.  Please speak your new search term after the vibration."];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0) {
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
                 } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
                     [utterance setRate:0.5];
@@ -418,7 +414,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:error.localizedDescription];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
         [utterance setRate:0.1];
-    } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
         [utterance setRate:0.5];
     }
     [speechSynthesizer speakUtterance:utterance];
