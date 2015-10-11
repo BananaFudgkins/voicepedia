@@ -168,15 +168,14 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         }
     }
     else if (speakIndex == 5) {
-<<<<<<< HEAD
+
         speakIndex = 6;
-=======
+
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
         [self.recorder stop];
         [self.waveformView setHidden:YES];
         [self.microphoneImage setHidden:NO];
         
->>>>>>> 9e999924697229e91c9d418f7fddca1d01776303
         readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
         [readingSynthesizer setDelegate:self];
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"We will begin reading the article intro now.  Please shake the device to stop reading.              " stringByAppendingString:extract]];
