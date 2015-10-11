@@ -257,8 +257,6 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-   //UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Error" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil,nil];
-    //[alertView show];
     
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:error.localizedDescription];
