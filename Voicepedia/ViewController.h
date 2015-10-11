@@ -11,6 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "GradientView.h"
+#import "SCSiriWaveformView.h"
 
 @interface ViewController : UIViewController <SpeechKitDelegate, AVSpeechSynthesizerDelegate, SKRecognizerDelegate, NSURLConnectionDataDelegate> {
     SKRecognizer *voiceSearch;
@@ -23,7 +24,9 @@
 }
 
 @property (strong, nonatomic) IBOutlet UILabel *logoLabel;
-
+@property (strong, nonatomic) IBOutlet SCSiriWaveformView *waveformView;
+@property (strong, nonatomic) AVAudioRecorder *recorder;
+@property (strong, nonatomic) IBOutlet UIImageView *microphoneImage;
 
 @end
 

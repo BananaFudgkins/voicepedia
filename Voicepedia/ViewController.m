@@ -37,6 +37,34 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     
     [SpeechKit setupWithID:@"NMDPTRIAL_mlabtechnologies20150120004933" host:@"sslsandbox.nmdp.nuancemobility.net" port:443 useSSL:YES delegate:self];
     
+    NSDictionary *settings = @{AVSampleRateKey:          [NSNumber numberWithFloat: 44100.0],
+                               AVFormatIDKey:            [NSNumber numberWithInt: kAudioFormatAppleLossless],
+                               AVNumberOfChannelsKey:    [NSNumber numberWithInt: 2],
+                               AVEncoderAudioQualityKey: [NSNumber numberWithInt: AVAudioQualityMin]};
+    
+    NSError *error;
+    NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
+    self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
+    
+    if (error) {
+        AVSpeechSynthesizer *errorSynthesizer = [[AVSpeechSynthesizer alloc] init];
+        
+        AVSpeechUtterance *errorUtterance = [[AVSpeechUtterance alloc] initWithString:error.localizedDescription];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [errorUtterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+            [errorUtterance setRate:0.5];
+        }
+        [errorSynthesizer speakUtterance:errorUtterance];
+    }
+    
+    CADisplayLink *displaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateMeters)];
+    [displaylink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    
+    [self.waveformView setWaveColor:[UIColor whiteColor]];
+    [self.waveformView setPrimaryWaveLineWidth:3.0f];
+    [self.waveformView setSecondaryWaveLineWidth:1.0];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -56,6 +84,24 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     shakeIndex = 0;
 }
 
+- (void)updateMeters
+{
+    CGFloat normalizedValue;
+    [self.recorder updateMeters];
+    normalizedValue = [self _normalizedPowerLevelFromDecibels:[self.recorder averagePowerForChannel:0]];
+    
+    [self.waveformView updateWithLevel:normalizedValue];
+}
+
+- (CGFloat)_normalizedPowerLevelFromDecibels:(CGFloat)decibels
+{
+    if (decibels < -60.0f || decibels == 0.0f) {
+        return 0.0f;
+    }
+    
+    return powf((powf(10.0f, 0.05f * decibels) - powf(10.0f, 0.05f * -60.0f)) * (1.0f / (1.0f - powf(10.0f, 0.05f * -60.0f))), 1.0f / 2.0f);
+}
+
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
     if (speakIndex == 1) {
         SKEndOfSpeechDetection detectionType;
@@ -69,6 +115,13 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                                                 delegate:self];
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         
+        [self.recorder prepareToRecord];
+        [self.recorder setMeteringEnabled:YES];
+        [self.recorder record];
+        
+        [self.microphoneImage setHidden:YES];
+        [self.waveformView setHidden:NO];
+        
         [logoLabel setText:@"Listening"];
     }
     else if (speakIndex == 2) {
@@ -81,6 +134,13 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                                                detection:detectionType
                                                 language:@"en_US"
                                                 delegate:self];
+        
+        [self.recorder prepareToRecord];
+        [self.recorder setMeteringEnabled:YES];
+        [self.recorder record];
+        
+        [self.microphoneImage setHidden:YES];
+        [self.waveformView setHidden:NO];
         
         [logoLabel setText:@"Listening"];
         
@@ -108,7 +168,15 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         }
     }
     else if (speakIndex == 5) {
+<<<<<<< HEAD
         speakIndex = 6;
+=======
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+        [self.recorder stop];
+        [self.waveformView setHidden:YES];
+        [self.microphoneImage setHidden:NO];
+        
+>>>>>>> 9e999924697229e91c9d418f7fddca1d01776303
         readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
         [readingSynthesizer setDelegate:self];
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"We will begin reading the article intro now.  Please shake the device to stop reading.              " stringByAppendingString:extract]];
@@ -286,15 +354,12 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             [utterance setRate:0.5];
         }
         [speechSynthesizer speakUtterance:utterance];
-    }
-    
-    [logoLabel setText:@"Voicepedia"];
-    
-    if ([results firstResult] == nil) {
-        
-    }
-    else {
+    } else {
         if (speakIndex == 1) {
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+            [self.recorder stop];
+            [self.microphoneImage setHidden:NO];
+            [self.waveformView setHidden:YES];
             recognizedVoice = [results firstResult];
             NSLog(@"%@", recognizedVoice);
             speakIndex++;
@@ -309,6 +374,10 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             [speechSynthesizer speakUtterance:utterance];
         }
         else if (speakIndex == 2) {
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+            [self.recorder stop];
+            [self.microphoneImage setHidden:NO];
+            [self.waveformView setHidden:YES];
             recognizedVoice2 = [results firstResult];
             speakIndex ++;
             NSLog(@"%@", recognizedVoice2);
@@ -338,6 +407,8 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             }
         }
     }
+    
+    [logoLabel setText:@"Voicepedia"];
 }
 
 - (void)recognizer:(SKRecognizer *)recognizer didFinishWithError:(NSError *)error suggestion:(NSString *)suggestion {
