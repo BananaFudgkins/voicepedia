@@ -18,6 +18,7 @@
     NSString *idString;
     NSString *extract;
     AVSpeechSynthesizer *readingSynthesizer;
+    int shakeIndex;
 }
 
 @end
@@ -52,6 +53,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     }
     [speechSynthesizer speakUtterance:utterance];
     speakIndex = 1;
+    shakeIndex = 0;
 }
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
@@ -106,6 +108,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         }
     }
     else if (speakIndex == 5) {
+        speakIndex = 6;
         readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
         [readingSynthesizer setDelegate:self];
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"We will begin reading the article intro now.  Please shake the device to stop reading.              " stringByAppendingString:extract]];
@@ -115,6 +118,63 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             [utterance setRate:0.5];
         }
         [readingSynthesizer speakUtterance:utterance];
+    }
+    else if (speakIndex == 6) {
+        readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
+        [readingSynthesizer setDelegate:self];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"We have finished reading your article.  If you want to read another article, please shake the device."];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [utterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+            [utterance setRate:0.5];
+        }
+        [readingSynthesizer speakUtterance:utterance];
+        speakIndex++;
+    }
+}
+
+- (void)restartSpeech {
+    AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+    [speechSynthesizer setDelegate:self];
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Paused reading.  If you want to stop, say 'stop' after the vibration.  If you want to resume, shake the device again."];
+    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        [utterance setRate:0.1];
+    } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+        [utterance setRate:0.5];
+    }
+    [speechSynthesizer speakUtterance:utterance];
+}
+
+- (void)restart {
+    AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+    [speechSynthesizer setDelegate:self];
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Please speak your new search term after the vibration."];
+    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+        [utterance setRate:0.1];
+    } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
+        [utterance setRate:0.5];
+    }
+    [speechSynthesizer speakUtterance:utterance];
+    speakIndex = 1;
+}
+
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    if (motion == UIEventSubtypeMotionShake) {
+        if (speakIndex == 6) {
+            [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+            NSTimer *timer;
+            timer = [NSTimer timerWithTimeInterval:0.03 target:self selector:@selector(restartSpeech) userInfo:nil repeats:NO];
+            shakeIndex++;
+        }
+        if (shakeIndex == 1) {
+            [readingSynthesizer continueSpeaking];
+            shakeIndex--;
+        }
+        if (speakIndex == 7) {
+            NSTimer *timer;
+            timer = [NSTimer timerWithTimeInterval:0.03 target:self selector:@selector(restart) userInfo:nil repeats:NO];
+        }
     }
 }
 
@@ -299,22 +359,6 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
     if(connection1){
         webData = [[NSMutableData alloc]init];
-    }
-}
-
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if (motion == UIEventSubtypeMotionShake) {
-        [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
-        AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-        [speechSynthesizer setDelegate:self];
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Stopped reading.  Thank you for using Voicepedia."];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue == 9.0) {
-            [utterance setRate:0.5];
-        }
-        [speechSynthesizer speakUtterance:utterance];
-        speakIndex = 1;
     }
 }
 

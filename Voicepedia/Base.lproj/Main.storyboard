@@ -24,8 +24,8 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="microphone-512" translatesAutoresizingMaskIntoConstraints="NO" id="CIT-bi-hML">
-                                <rect key="frame" x="163" y="235" width="48" height="48"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="microphone-256" translatesAutoresizingMaskIntoConstraints="NO" id="CIT-bi-hML">
+                                <rect key="frame" x="157" y="224" width="60" height="60"/>
                             </imageView>
                         </subviews>
                         <animations/>
@@ -42,6 +42,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="microphone-512" width="512" height="512"/>
+        <image name="microphone-256" width="256" height="256"/>
     </resources>
 </document>
