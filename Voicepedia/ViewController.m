@@ -344,6 +344,11 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     
     if ([results firstResult] == nil) {
         NSLog(@"Fired %@", [results firstResult]);
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+        [self.recorder stop];
+        [self.microphoneImage setHidden:NO];
+        [self.waveformView setHidden:YES];
+        recognizedVoice = [results firstResult];
         AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
         [speechSynthesizer setDelegate:self];
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
