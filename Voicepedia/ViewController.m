@@ -201,6 +201,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 
 - (void)restartSpeech {
+    speakIndex--;
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
     [speechSynthesizer setDelegate:self];
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Paused reading.  If you want to stop, say 'stop' after the vibration.  If you want to resume, shake the device again."];
@@ -233,6 +234,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             NSTimer *timer;
             timer = [NSTimer timerWithTimeInterval:0.03 target:self selector:@selector(restartSpeech) userInfo:nil repeats:NO];
             shakeIndex++;
+            speakIndex++;
         }
         if (shakeIndex == 1) {
             [readingSynthesizer continueSpeaking];
