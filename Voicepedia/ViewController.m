@@ -35,12 +35,6 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     [self.view addSubview:gradientView];
     [self.view sendSubviewToBack:gradientView];
     
-    // Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
     voiceSearch = nil;
     shakeIndex = 0;
     speakIndex = 1;
@@ -89,6 +83,8 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     [speechSynthesizer speakUtterance:utterance];
     speakIndex = 1;
     shakeIndex = 0;
+    
+    // Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)updateMeters
