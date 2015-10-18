@@ -222,9 +222,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    [super motionEnded:motion withEvent:event];
-    
-    if (event.subtype == UIEventSubtypeMotionShake) {
+    if (motion == UIEventSubtypeMotionShake) {
         NSLog(@"Shake %d", shakeIndex);
         if (speakIndex == 6) {
             [readingSynthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryWord];
