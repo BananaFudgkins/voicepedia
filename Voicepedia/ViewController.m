@@ -150,16 +150,27 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         [logoLabel setText:@"Listening"];
     }
     else if (speakIndex == 3) {
-        /*
-        recognizedVoice = [recognizedVoice stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&list=search&srsearch=%@", recognizedVoice]];
-        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-        NSLog(@"%@", url);
-        connection = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
-        if(connection){
-            webData = [[NSMutableData alloc]init];
-        }
-         */
+        NSLog(@"Third detect");
+        SKEndOfSpeechDetection detectionType;
+        NSString* recoType;
+        recoType = SKDictationRecognizerType;
+        detectionType = SKLongEndOfSpeechDetection;
+        
+        voiceSearch = [[SKRecognizer alloc] initWithType:recoType
+                                               detection:detectionType
+                                                language:@"en_US"
+                                                delegate:self];
+        
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        
+        [self.recorder prepareToRecord];
+        [self.recorder setMeteringEnabled:YES];
+        [self.recorder record];
+        
+        [self.microphoneImage setHidden:YES];
+        [self.waveformView setHidden:NO];
+        
+        [logoLabel setText:@"Listening"];
     }
     else if (speakIndex == 4) {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=%@", articleTitleString]];
@@ -181,7 +192,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         
         readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
         [readingSynthesizer setDelegate:self];
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"Please shake the device once to pause reading, and a second time to resume.  We will begin reading the article intro now.                                           " stringByAppendingString:extract]];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"Please shake the device once to pause reading, and a second time to resume.                                           " stringByAppendingString:extract]];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
         } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
@@ -259,7 +270,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    if (speakIndex == 3) {
+    if (speakIndex == 3 || speakIndex == 1) {
         NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
         NSDictionary *query = [allDataDictionary objectForKey:@"query"];
         NSArray *arrayOfSearch = [query objectForKey:@"search"];
@@ -275,6 +286,30 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         if(connection1){
             webData = [[NSMutableData alloc]init];
         }
+        if (speakIndex == 1) {
+            NSString *revisedTitleString = [articleTitleString stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
+            AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+            [speechSynthesizer setDelegate:self];
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We found an article called %@.  Is this correct?", revisedTitleString]];
+            if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                [utterance setRate:0.1];
+            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                [utterance setRate:0.5];
+            }
+            [speechSynthesizer speakUtterance:utterance];
+        }
+        else {
+            AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+            [speechSynthesizer setDelegate:self];
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We will read the article intro now."]];
+            if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                [utterance setRate:0.1];
+            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                [utterance setRate:0.5];
+            }
+            [speechSynthesizer speakUtterance:utterance];
+        }
+        
         speakIndex++;
     }
     else if (speakIndex == 4) {
@@ -286,6 +321,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=%@", articleTitleString]];
         NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
         NSLog(@"URL 2 %@", url);
+        NSLog(@"URL 2 %@", articleTitleString);
         connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
         if(connection1){
             webData = [[NSMutableData alloc]init];
@@ -356,6 +392,8 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             [self.waveformView setHidden:YES];
             recognizedVoice = [results firstResult];
             NSLog(@"%@", recognizedVoice);
+            [self searchWikipedia];
+            /*
             speakIndex++;
             AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
             [speechSynthesizer setDelegate:self];
@@ -366,6 +404,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 [utterance setRate:0.5];
             }
             [speechSynthesizer speakUtterance:utterance];
+             */
         }
         else if (speakIndex == 2) {
             [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
@@ -373,13 +412,13 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             [self.microphoneImage setHidden:NO];
             [self.waveformView setHidden:YES];
             recognizedVoice2 = [results firstResult];
-            speakIndex ++;
+            speakIndex = 3;
             NSLog(@"%@", recognizedVoice2);
             if ([recognizedVoice2 containsString:@"Yes"] || [recognizedVoice2 containsString:@"yes"]) {
                 AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
                 [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"Ok, we are searching for %@", recognizedVoice]];
-                [self searchWikipedia];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"Okay.  Do you want to listen to the introduction or the table of contents?"]];
+                //[self searchWikipedia];
                 if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
                 } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
@@ -392,6 +431,30 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
                 [speechSynthesizer setDelegate:self];
                 AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't search for that.  Please speak your new search term after the vibration."];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                [speechSynthesizer speakUtterance:utterance];
+            }
+        }
+        else if (speakIndex == 3) {
+            NSLog(@"Third");
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+            [self.recorder stop];
+            [self.microphoneImage setHidden:NO];
+            [self.waveformView setHidden:YES];
+            recognizedVoice2 = [results firstResult];
+            //speakIndex ++;
+            NSLog(@"%@", recognizedVoice2);
+            if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
+                [self searchWikipedia];
+            } else if ([recognizedVoice2 containsString:@"Table of contents"] || [recognizedVoice2 containsString:@"Table of contents"]) {
+                NSLog(@"The user said no");
+                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+                [speechSynthesizer setDelegate:self];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we will read the table of contents now."];
                 if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
                 } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
