@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AC519F1BC9FD6F00159581 /* SpeechKit.framework */; settings = {ASSET_TAGS = (); }; };
-		68ED77411BC9FFA800248FCB /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */; settings = {ASSET_TAGS = (); }; };
+		68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AC519F1BC9FD6F00159581 /* SpeechKit.framework */; };
+		68ED77411BC9FFA800248FCB /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */; };
 		AC1B01E41BC9A89200504FDE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E31BC9A89200504FDE /* main.m */; };
 		AC1B01E71BC9A89200504FDE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E61BC9A89200504FDE /* AppDelegate.m */; };
 		AC1B01EA1BC9A89200504FDE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E91BC9A89200504FDE /* ViewController.m */; };
@@ -22,7 +22,7 @@
 		ACC80D011BC9B07000BA7229 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D001BC9B07000BA7229 /* QuartzCore.framework */; };
 		ACC80D031BC9B07700BA7229 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D021BC9B07700BA7229 /* SystemConfiguration.framework */; };
 		ACC80D051BC9B08B00BA7229 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */; };
-		ACC80D081BC9B17900BA7229 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC80D071BC9B17900BA7229 /* GradientView.m */; settings = {ASSET_TAGS = (); }; };
+		ACC80D081BC9B17900BA7229 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC80D071BC9B17900BA7229 /* GradientView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +41,29 @@
 			remoteInfo = Voicepedia;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		681821F41BEFE2D000251199 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		681822171BEFE2FC00251199 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		68AC519F1BC9FD6F00159581 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechKit.framework; sourceTree = "<group>"; };
@@ -192,6 +215,8 @@
 				AC1B01DB1BC9A89200504FDE /* Sources */,
 				AC1B01DC1BC9A89200504FDE /* Frameworks */,
 				AC1B01DD1BC9A89200504FDE /* Resources */,
+				681821F41BEFE2D000251199 /* Embed Watch Content */,
+				681822171BEFE2FC00251199 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
