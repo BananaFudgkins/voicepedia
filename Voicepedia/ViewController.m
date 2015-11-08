@@ -19,6 +19,7 @@
     NSString *extract;
     AVSpeechSynthesizer *readingSynthesizer;
     int shakeIndex;
+    int tableIndex;
 }
 
 @end
@@ -38,6 +39,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     voiceSearch = nil;
     shakeIndex = 0;
     speakIndex = 1;
+    tableIndex = 0;
     [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
     readingSynthesizer = nil;
     
@@ -302,6 +304,13 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
             [speechSynthesizer setDelegate:self];
             AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We will read the article intro now."]];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&list=search&srsearch=%@", recognizedVoice]];
+            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+            NSLog(@"URL 4%@", url);
+            connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+            if(connection1){
+                webData = [[NSMutableData alloc]init];
+            }
             if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                 [utterance setRate:0.1];
             } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
@@ -455,6 +464,14 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
                 [speechSynthesizer setDelegate:self];
                 AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we will read the table of contents now."];
+                tableIndex = 1;
+                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&list=search&srsearch=%@", articleTitleString]];
+                NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+                NSLog(@"URL 5%@", url);
+                connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+                if(connection1){
+                    webData = [[NSMutableData alloc]init];
+                }
                 if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
                 } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
