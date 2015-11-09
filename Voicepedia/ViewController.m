@@ -20,6 +20,9 @@
     AVSpeechSynthesizer *readingSynthesizer;
     int shakeIndex;
     int tableIndex;
+    NSMutableArray *sectionsArray;
+    NSString *completeSectionString;
+    AVSpeechSynthesizer *speechSynthesizer2;
 }
 
 @end
@@ -42,6 +45,8 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     tableIndex = 0;
     [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
     readingSynthesizer = nil;
+    
+    sectionsArray = [[NSMutableArray alloc]init];
     
     [SpeechKit setupWithID:@"NMDPTRIAL_mlabtechnologies20150120004933" host:@"sslsandbox.nmdp.nuancemobility.net" port:443 useSSL:YES delegate:self];
     
@@ -272,6 +277,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    NSLog(@"JSON");
     if (speakIndex == 3 || speakIndex == 1) {
         NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
         NSDictionary *query = [allDataDictionary objectForKey:@"query"];
@@ -318,7 +324,6 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             }
             [speechSynthesizer speakUtterance:utterance];
         }
-        
         speakIndex++;
     }
     else if (speakIndex == 4) {
@@ -344,6 +349,20 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         extract = [pageid objectForKey:@"extract"];
         NSLog(@"URL 3 %@", extract);
     }
+    
+    /*
+    if (tableIndex == 1) {
+        NSLog(@"Get sections");
+        NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
+        NSDictionary *parse = [allDataDictionary objectForKey:@"parse"];
+        NSArray *sections = [parse objectForKey:@"sections"];
+        for (NSDictionary *section in sections) {
+            NSString *sectionTitle = [section objectForKey:@"line"];
+            [sectionsArray addObject:sectionTitle];
+        }
+        [self readTableOfContents];
+    }
+     */
 }
 
 
@@ -369,6 +388,29 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     [logoLabel setText:@"Listening"];
     
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+}
+
+- (void)readTableOfContents {
+    for (int i = 0; i < [sectionsArray count]; i++) {
+        NSString *string = [sectionsArray objectAtIndex:i];
+        completeSectionString = [completeSectionString stringByAppendingString:string];
+    }
+    NSLog(completeSectionString);
+    [self performSelector:@selector(speakTable) withObject:nil afterDelay:3.0];
+}
+
+- (void)speakTable {
+    if (![speechSynthesizer2 isSpeaking]) {
+        AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+        [speechSynthesizer setDelegate:self];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:completeSectionString];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [utterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [utterance setRate:0.5];
+        }
+        [speechSynthesizer speakUtterance:utterance];
+    }
 }
 
 - (void)recognizer:(SKRecognizer *)recognizer didFinishWithResults:(SKRecognition *)results {
@@ -459,25 +501,26 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             NSLog(@"%@", recognizedVoice2);
             if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
                 [self searchWikipedia];
-            } else if ([recognizedVoice2 containsString:@"Table of contents"] || [recognizedVoice2 containsString:@"Table of contents"]) {
+            } else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"contents"]) {
                 NSLog(@"The user said no");
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
-                [speechSynthesizer setDelegate:self];
+                speechSynthesizer2 = [[AVSpeechSynthesizer alloc] init];
+                [speechSynthesizer2 setDelegate:self];
                 AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we will read the table of contents now."];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                [speechSynthesizer2 speakUtterance:utterance];
                 tableIndex = 1;
-                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&list=search&srsearch=%@", articleTitleString]];
+                speakIndex = 21;
+                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=sections&page=%@&redirects", articleTitleString]];
                 NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
                 NSLog(@"URL 5%@", url);
                 connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
                 if(connection1){
                     webData = [[NSMutableData alloc]init];
                 }
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
-                }
-                [speechSynthesizer speakUtterance:utterance];
             }
         }
     }
