@@ -26,6 +26,7 @@
     NSString *chosenSection;
     NSString *sectionContent;
     int sectionVal;
+    NSMutableArray *verbalArray;
 }
 
 @end
@@ -455,7 +456,11 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 
 - (void)readTableOfContents {
-    completeSectionString = [sectionsArray componentsJoinedByString:@","];
+    verbalArray = [[NSMutableArray alloc]init];
+    for (int i = 0; i < [sectionsArray count]; i++) {
+        [verbalArray addObject:[[NSString stringWithFormat:@"Section %d: ", i + 1] stringByAppendingString:[sectionsArray objectAtIndex:i]]];
+    }
+    completeSectionString = [verbalArray componentsJoinedByString:@","];
     NSLog(@"%@", completeSectionString);
     [self performSelector:@selector(speakTable) withObject:nil afterDelay:3.0];
 }
