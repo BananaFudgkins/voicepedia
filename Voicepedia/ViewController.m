@@ -23,6 +23,9 @@
     NSMutableArray *sectionsArray;
     NSString *completeSectionString;
     AVSpeechSynthesizer *speechSynthesizer2;
+    NSString *chosenSection;
+    NSString *sectionContent;
+    int sectionVal;
 }
 
 @end
@@ -219,6 +222,9 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         [synth speakUtterance:utterance];
         speakIndex = 1;
     }
+    else if (speakIndex == 27) {
+        [self startListening];
+    }
 }
 
 
@@ -251,6 +257,14 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             [readingSynthesizer continueSpeaking];
             shakeIndex--;
             speakIndex = 6;
+        }
+        else if (speakIndex == 29) {
+            [readingSynthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryWord];
+            speakIndex ++;
+        }
+        else if (speakIndex == 30) {
+            [readingSynthesizer continueSpeaking];
+            speakIndex --;
         }
     }
 }
@@ -349,9 +363,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         extract = [pageid objectForKey:@"extract"];
         NSLog(@"URL 3 %@", extract);
     }
-    
-    /*
-    if (tableIndex == 1) {
+    else if(speakIndex == 26) {
         NSLog(@"Get sections");
         NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
         NSDictionary *parse = [allDataDictionary objectForKey:@"parse"];
@@ -362,7 +374,52 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         }
         [self readTableOfContents];
     }
-     */
+    else if (speakIndex == 28) {
+        NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
+        NSDictionary *query = [allDataDictionary objectForKey:@"query"];
+        NSArray *pageids = [query objectForKey:@"pageids"];
+        idString = [NSString stringWithFormat:@"%@", [pageids firstObject]];
+        NSLog(@"IDSTRING %@", idString);
+        speakIndex++;
+        for (int i = 0; i < [sectionsArray count]; i++) {
+            NSString *string = [sectionsArray objectAtIndex:i];
+            if ([string isEqualToString:recognizedVoice2]) {
+                chosenSection = string;
+                sectionContent = string;
+                sectionVal = i + 1;
+                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&rvprop=content&rvsection=%d&titles=%@", sectionVal, articleTitleString]];
+                NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+                NSLog(@"URL 5%@", url);
+                connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+                if(connection1){
+                    webData = [[NSMutableData alloc]init];
+                }
+                speakIndex = 29;
+            }
+        }
+    }
+    else if (speakIndex == 29) {
+        NSLog(@"Begins parsing %@, %@", sectionContent, idString);
+        NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
+        NSDictionary *query = [allDataDictionary objectForKey:@"query"];
+        NSDictionary *pages = [query objectForKey:@"pages"];
+        NSDictionary *pageid = [pages objectForKey:idString];
+        NSArray *revisions = [pageid objectForKey:@"revisions"];
+        NSDictionary *first = [revisions objectAtIndex:0];
+        sectionContent = [first objectForKey:@"*"];
+        NSLog(@"%@", sectionContent);
+        NSString *s1 = [sectionContent stringByReplacingOccurrencesOfString:@"=" withString:@""];
+        NSString *s2 = [s1 stringByReplacingOccurrencesOfString:[sectionsArray objectAtIndex:sectionVal - 1] withString:@""];
+        readingSynthesizer = [[AVSpeechSynthesizer alloc]init];
+        [readingSynthesizer setDelegate:self];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We will begin reading your article section now.  Please shake the device once to pause reading, and a second time to resume.                                           %@", s2]];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [utterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [utterance setRate:0.5];
+        }
+        [readingSynthesizer speakUtterance:utterance];
+    }
 }
 
 
@@ -385,17 +442,21 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                                             language:@"en_US"
                                             delegate:self];
     
-    [logoLabel setText:@"Listening"];
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+    [self.recorder prepareToRecord];
+    [self.recorder setMeteringEnabled:YES];
+    [self.recorder record];
+    
+    [self.microphoneImage setHidden:YES];
+    [self.waveformView setHidden:NO];
+    
+    [logoLabel setText:@"Listening"];
 }
 
 - (void)readTableOfContents {
-    for (int i = 0; i < [sectionsArray count]; i++) {
-        NSString *string = [sectionsArray objectAtIndex:i];
-        completeSectionString = [completeSectionString stringByAppendingString:string];
-    }
-    NSLog(completeSectionString);
+    completeSectionString = [sectionsArray componentsJoinedByString:@","];
+    NSLog(@"%@", completeSectionString);
     [self performSelector:@selector(speakTable) withObject:nil afterDelay:3.0];
 }
 
@@ -403,13 +464,14 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     if (![speechSynthesizer2 isSpeaking]) {
         AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
         [speechSynthesizer setDelegate:self];
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:completeSectionString];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"%@.  Which section do you want to listen to?", completeSectionString]];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
         } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
             [utterance setRate:0.5];
         }
         [speechSynthesizer speakUtterance:utterance];
+        speakIndex = 27;
     }
 }
 
@@ -512,8 +574,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                     [utterance setRate:0.5];
                 }
                 [speechSynthesizer2 speakUtterance:utterance];
-                tableIndex = 1;
-                speakIndex = 21;
+                speakIndex = 26;
                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=sections&page=%@&redirects", articleTitleString]];
                 NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
                 NSLog(@"URL 5%@", url);
@@ -521,6 +582,22 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 if(connection1){
                     webData = [[NSMutableData alloc]init];
                 }
+            }
+        }
+        else if (speakIndex == 27) {
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+            [self.recorder stop];
+            [self.microphoneImage setHidden:NO];
+            [self.waveformView setHidden:YES];
+            recognizedVoice2 = [results firstResult];
+            speakIndex ++;
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=query&titles=%@&indexpageids=&format=json", articleTitleString]];
+            NSLog(@"Article title string %@", articleTitleString);
+            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+            NSLog(@"%@", url);
+            connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+            if(connection1){
+                webData = [[NSMutableData alloc]init];
             }
         }
     }
