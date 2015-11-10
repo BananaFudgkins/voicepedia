@@ -382,9 +382,9 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         idString = [NSString stringWithFormat:@"%@", [pageids firstObject]];
         NSLog(@"IDSTRING %@", idString);
         speakIndex++;
-        for (int i = 0; i < [sectionsArray count]; i++) {
-            NSString *string = [sectionsArray objectAtIndex:i];
-            if ([string isEqualToString:recognizedVoice2]) {
+        for (int i = 0; i < [verbalArray count]; i++) {
+            NSString *string = [verbalArray objectAtIndex:i];
+            if ([string containsString:recognizedVoice2]) {
                 chosenSection = string;
                 sectionContent = string;
                 sectionVal = i + 1;
