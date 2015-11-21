@@ -436,6 +436,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 
 - (void)recognizerDidFinishRecording:(SKRecognizer *)recognizer {
     NSLog(@"Recording finished");
+    [currentWordLabel setText:@""];
     [currentWordLabel setHidden:NO];
 }
 
