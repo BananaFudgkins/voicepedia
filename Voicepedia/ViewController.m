@@ -35,6 +35,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 
 @implementation ViewController
 @synthesize logoLabel;
+@synthesize currentWordLabel;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -228,6 +229,10 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     }
 }
 
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance {
+    NSString *labelString = [utterance.speechString substringWithRange:characterRange];
+    [currentWordLabel setText:labelString];
+}
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didPauseSpeechUtterance:(AVSpeechUtterance *)utterance {
     NSLog(@"Speech Paused");
@@ -426,6 +431,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 
 - (void)recognizerDidBeginRecording:(SKRecognizer *)recognizer {
     NSLog(@"Recording started");
+    [currentWordLabel setHidden:YES];
 }
 
 - (void)recognizerDidFinishRecording:(SKRecognizer *)recognizer {
@@ -611,8 +617,12 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 
 - (void)recognizer:(SKRecognizer *)recognizer didFinishWithError:(NSError *)error suggestion:(NSString *)suggestion {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [self.recorder stop];
+    [self.microphoneImage setHidden:NO];
+    [self.waveformView setHidden:YES];
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
-    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:error.localizedDescription];
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[error.localizedDescription stringByAppendingString:@".  Please check your internet connection"]];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
         [utterance setRate:0.1];
     } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,18 +18,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="microphone-512" translatesAutoresizingMaskIntoConstraints="NO" id="CIT-bi-hML">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="microphone-512" translatesAutoresizingMaskIntoConstraints="NO" id="CIT-bi-hML">
                                 <rect key="frame" x="163" y="235" width="48" height="48"/>
                                 <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="TAC-CA-8Pj"/>
+                                    <constraint firstAttribute="width" constant="48" id="tfY-uh-wCY"/>
+                                </constraints>
                             </imageView>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GCZ-ke-vpo" customClass="SCSiriWaveformView">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GCZ-ke-vpo" customClass="SCSiriWaveformView">
                                 <rect key="frame" x="20" y="209" width="335" height="100"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Voicepedia" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wku-7x-t30">
-                                <rect key="frame" x="57" y="171" width="261" height="45"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Voicepedia" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wku-7x-t30">
+                                <rect key="frame" x="103" y="171" width="168" height="45"/>
                                 <animations/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY7-m7-F7j">
+                                <rect key="frame" x="0.0" y="488" width="375" height="66"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -36,9 +47,22 @@
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Wku-7x-t30" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="Ayt-BQ-0ff"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="189" id="LMi-Xq-ZWa"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="CIT-bi-hML" secondAttribute="bottom" constant="384" id="RIS-M0-r2p"/>
+                            <constraint firstItem="CIT-bi-hML" firstAttribute="centerX" secondItem="GCZ-ke-vpo" secondAttribute="centerX" id="WiV-JV-Whe"/>
+                            <constraint firstItem="CIT-bi-hML" firstAttribute="top" secondItem="Wku-7x-t30" secondAttribute="bottom" constant="19" id="bTl-9W-eKP"/>
+                            <constraint firstItem="Wku-7x-t30" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="151" id="f9p-VG-LCd"/>
+                            <constraint firstItem="CIT-bi-hML" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qgw-7w-Nm2"/>
+                            <constraint firstItem="CIT-bi-hML" firstAttribute="centerY" secondItem="GCZ-ke-vpo" secondAttribute="centerY" id="rg2-hF-Bwb"/>
+                            <constraint firstItem="Wku-7x-t30" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="87" id="sE9-NJ-hec"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="z8Z-uK-PBD"/>
+                        </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="currentWordLabel" destination="oY7-m7-F7j" id="5UF-do-kf9"/>
                         <outlet property="logoLabel" destination="Wku-7x-t30" id="QTn-9L-A3P"/>
                         <outlet property="microphoneImage" destination="CIT-bi-hML" id="lKb-Ui-CZh"/>
                         <outlet property="waveformView" destination="GCZ-ke-vpo" id="Jym-3b-7Z7"/>

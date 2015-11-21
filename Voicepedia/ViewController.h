@@ -27,6 +27,7 @@
 @property (strong, nonatomic) IBOutlet SCSiriWaveformView *waveformView;
 @property (strong, nonatomic) AVAudioRecorder *recorder;
 @property (strong, nonatomic) IBOutlet UIImageView *microphoneImage;
+@property (weak, nonatomic) IBOutlet UILabel *currentWordLabel;
 
 @end
 
