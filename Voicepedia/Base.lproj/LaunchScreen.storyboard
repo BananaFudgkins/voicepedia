@@ -15,15 +15,15 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Rectangle 156" translatesAutoresizingMaskIntoConstraints="NO" id="3Vs-c2-WVl">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <animations/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Brc-hS-9Ku">
-                                <rect key="frame" x="57" y="171" width="261" height="45"/>
+                                <rect key="frame" x="81" y="153" width="253" height="114"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -32,19 +32,21 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Brc-hS-9Ku" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="151" id="042-Xj-AGo"/>
-                            <constraint firstItem="Brc-hS-9Ku" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="41" id="AF5-aZ-gNF"/>
-                            <constraint firstItem="3Vs-c2-WVl" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="OIv-31-YGb"/>
-                            <constraint firstItem="3Vs-c2-WVl" firstAttribute="centerX" secondItem="Brc-hS-9Ku" secondAttribute="centerX" id="bXb-pp-NZv"/>
-                            <constraint firstItem="3Vs-c2-WVl" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="jdC-9S-KgU"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Brc-hS-9Ku" secondAttribute="bottom" constant="451" id="nVw-za-afv"/>
+                            <constraint firstItem="Brc-hS-9Ku" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="133" id="0eb-vU-DHw"/>
+                            <constraint firstItem="3Vs-c2-WVl" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="3Ls-gg-XfD"/>
+                            <constraint firstItem="Brc-hS-9Ku" firstAttribute="centerX" secondItem="3Vs-c2-WVl" secondAttribute="centerX" id="8CW-uq-NJs"/>
+                            <constraint firstItem="Brc-hS-9Ku" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="61" id="PfI-mU-2de"/>
+                            <constraint firstAttribute="trailing" secondItem="3Vs-c2-WVl" secondAttribute="trailing" id="coO-7A-N9t"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Brc-hS-9Ku" secondAttribute="bottom" constant="469" id="hKW-gZ-36g"/>
+                            <constraint firstItem="3Vs-c2-WVl" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="tj7-OO-yex"/>
+                            <constraint firstItem="3Vs-c2-WVl" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="wIO-9s-wzd"/>
                         </constraints>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52.5" y="374.5"/>
+            <point key="canvasLocation" x="52" y="374"/>
         </scene>
     </scenes>
     <resources>

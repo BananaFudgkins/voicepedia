@@ -26,13 +26,8 @@
                                     <constraint firstAttribute="width" constant="35" id="rF6-If-2MD"/>
                                 </constraints>
                             </imageView>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GCZ-ke-vpo" customClass="SCSiriWaveformView">
-                                <rect key="frame" x="20" y="209" width="335" height="100"/>
-                                <animations/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Voicepedia" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wku-7x-t30">
-                                <rect key="frame" x="103" y="171" width="168" height="45"/>
+                                <rect key="frame" x="51" y="153" width="272" height="45"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -47,22 +42,28 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GCZ-ke-vpo" customClass="SCSiriWaveformView">
+                                <rect key="frame" x="20" y="206" width="335" height="100"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="CIT-bi-hML" firstAttribute="centerX" secondItem="Wku-7x-t30" secondAttribute="centerX" id="5eZ-OJ-RFh"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="5zw-xj-xDe"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="oY7-m7-F7j" secondAttribute="bottom" constant="113" id="7cI-An-syy"/>
-                            <constraint firstAttribute="bottom" secondItem="GCZ-ke-vpo" secondAttribute="bottom" constant="358" id="ETd-Y5-1UX"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="189" id="P5d-Ef-iMW"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="V5d-w7-6Ic"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="top" secondItem="Wku-7x-t30" secondAttribute="bottom" constant="8" symbolic="YES" id="Dsx-Az-Dyr"/>
+                            <constraint firstItem="Wku-7x-t30" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="133" id="EeM-CB-vQM"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="GaR-0C-r1R"/>
+                            <constraint firstItem="Wku-7x-t30" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="UE5-ZT-aAQ"/>
                             <constraint firstItem="CIT-bi-hML" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="226" id="Z8d-a8-dxl"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="206" id="Zwg-5V-NrX"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="aHh-Oo-hvW"/>
                             <constraint firstItem="oY7-m7-F7j" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="cgW-yy-PgR"/>
-                            <constraint firstItem="Wku-7x-t30" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="151" id="f9p-VG-LCd"/>
-                            <constraint firstItem="CIT-bi-hML" firstAttribute="top" secondItem="Wku-7x-t30" secondAttribute="bottom" constant="10" id="hNX-Gp-dV3"/>
-                            <constraint firstItem="Wku-7x-t30" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="87" id="sE9-NJ-hec"/>
+                            <constraint firstAttribute="bottom" secondItem="GCZ-ke-vpo" secondAttribute="bottom" constant="361" id="f8D-KQ-RAH"/>
                             <constraint firstItem="CIT-bi-hML" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tKb-my-XZ8"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="centerY" secondItem="CIT-bi-hML" secondAttribute="centerY" id="wnh-ov-q1X"/>
+                            <constraint firstItem="Wku-7x-t30" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="35" id="wzb-KV-nLV"/>
                             <constraint firstItem="oY7-m7-F7j" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="y8C-Et-Ejr"/>
                         </constraints>
                     </view>
