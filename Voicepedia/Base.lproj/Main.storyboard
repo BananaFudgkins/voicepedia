@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -22,17 +23,26 @@
                                 <rect key="frame" x="170" y="226" width="35" height="59"/>
                                 <animations/>
                                 <constraints>
+                                    <constraint firstAttribute="width" secondItem="CIT-bi-hML" secondAttribute="height" multiplier="35:59" id="DMW-CG-YIq"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="35" id="OYf-gd-GH3"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="35" id="kt3-qE-RQI"/>
                                     <constraint firstAttribute="height" constant="59" id="plo-0k-KCq"/>
                                     <constraint firstAttribute="width" constant="35" id="rF6-If-2MD"/>
+                                    <constraint firstAttribute="width" secondItem="CIT-bi-hML" secondAttribute="height" multiplier="35:59" id="unB-CW-big"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="59" id="vO8-CF-vl9"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="59" id="yZK-n7-QfD"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Voicepedia" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wku-7x-t30">
-                                <rect key="frame" x="51" y="153" width="272" height="45"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GCZ-ke-vpo" customClass="SCSiriWaveformView">
+                                <rect key="frame" x="20" y="206" width="335" height="100"/>
                                 <animations/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="Cqo-ey-ZU1"/>
+                                    <constraint firstAttribute="width" constant="335" id="NUo-G4-poy"/>
+                                    <constraint firstAttribute="width" secondItem="GCZ-ke-vpo" secondAttribute="height" multiplier="67:20" id="edi-p3-dav"/>
+                                </constraints>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY7-m7-F7j">
                                 <rect key="frame" x="0.0" y="488" width="375" height="66"/>
                                 <constraints>
@@ -42,27 +52,26 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GCZ-ke-vpo" customClass="SCSiriWaveformView">
-                                <rect key="frame" x="20" y="206" width="335" height="100"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Voicepedia" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wku-7x-t30">
+                                <rect key="frame" x="51" y="153" width="272" height="45"/>
                                 <animations/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="oY7-m7-F7j" secondAttribute="bottom" constant="113" id="7cI-An-syy"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="top" secondItem="Wku-7x-t30" secondAttribute="bottom" constant="8" symbolic="YES" id="Dsx-Az-Dyr"/>
                             <constraint firstItem="Wku-7x-t30" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="133" id="EeM-CB-vQM"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="GaR-0C-r1R"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="TI1-e7-PlQ"/>
                             <constraint firstItem="Wku-7x-t30" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="UE5-ZT-aAQ"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="top" secondItem="Wku-7x-t30" secondAttribute="bottom" constant="8" symbolic="YES" id="Uno-c1-XDx"/>
                             <constraint firstItem="CIT-bi-hML" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="226" id="Z8d-a8-dxl"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="206" id="Zwg-5V-NrX"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="aHh-Oo-hvW"/>
                             <constraint firstItem="oY7-m7-F7j" firstAttribute="centerX" secondItem="CIT-bi-hML" secondAttribute="centerX" id="cgW-yy-PgR"/>
-                            <constraint firstAttribute="bottom" secondItem="GCZ-ke-vpo" secondAttribute="bottom" constant="361" id="f8D-KQ-RAH"/>
+                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="centerY" secondItem="CIT-bi-hML" secondAttribute="centerY" id="pNO-wG-uTD"/>
                             <constraint firstItem="CIT-bi-hML" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tKb-my-XZ8"/>
-                            <constraint firstItem="GCZ-ke-vpo" firstAttribute="centerY" secondItem="CIT-bi-hML" secondAttribute="centerY" id="wnh-ov-q1X"/>
                             <constraint firstItem="Wku-7x-t30" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="35" id="wzb-KV-nLV"/>
                             <constraint firstItem="oY7-m7-F7j" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="y8C-Et-Ejr"/>
                         </constraints>
