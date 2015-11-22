@@ -212,7 +212,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         }
         [readingSynthesizer speakUtterance:utterance];
     }
-    else if (speakIndex == 6) {
+    else if (speakIndex == 6 || speakIndex == 29) {
         AVSpeechSynthesizer *synth = [[AVSpeechSynthesizer alloc] init];
         [synth setDelegate:self];
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"We have finished reading your article.  Please speak your new search term after the vibration."];
@@ -362,12 +362,29 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         }
     }
     else if (speakIndex == 5) {
-        NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
-        NSDictionary *query = [allDataDictionary objectForKey:@"query"];
-        NSDictionary *pages = [query objectForKey:@"pages"];
-        NSDictionary *pageid = [pages objectForKey:idString];
-        extract = [pageid objectForKey:@"extract"];
-        NSLog(@"URL 3 %@", extract);
+        @try {
+            NSDictionary *allDataDictionary = [NSJSONSerialization JSONObjectWithData:webData options:0 error:nil];
+            NSDictionary *query = [allDataDictionary objectForKey:@"query"];
+            NSDictionary *pages = [query objectForKey:@"pages"];
+            NSDictionary *pageid = [pages objectForKey:idString];
+            extract = [pageid objectForKey:@"extract"];
+            NSLog(@"URL 3 %@", extract);
+        }
+        @catch (NSException *exception) {
+            AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+            [speechSynthesizer setDelegate:self];
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"We're sorry, the article you named doesn't have an introduction.  Please say the name of a different article after the vibration."];
+            if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                [utterance setRate:0.1];
+            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                [utterance setRate:0.5];
+            }
+            speakIndex = 1;
+            [speechSynthesizer speakUtterance:utterance];
+        }
+        @finally {
+            
+        }
     }
     else if(speakIndex == 26) {
         NSLog(@"Get sections");
@@ -403,6 +420,18 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 speakIndex = 29;
             }
         }
+        if (chosenSection == nil || [chosenSection  isEqual:@""]) {
+            AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+            [speechSynthesizer setDelegate:self];
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"We're sorry, the section you named doesn't exist in the article.  Please say the name of a different section after the vibration."];
+            if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                [utterance setRate:0.1];
+            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                [utterance setRate:0.5];
+            }
+            speakIndex = 27;
+            [speechSynthesizer speakUtterance:utterance];
+        }
     }
     else if (speakIndex == 29) {
         NSLog(@"Begins parsing %@, %@", sectionContent, idString);
@@ -415,10 +444,11 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         sectionContent = [first objectForKey:@"*"];
         NSLog(@"%@", sectionContent);
         NSString *s1 = [sectionContent stringByReplacingOccurrencesOfString:@"=" withString:@""];
-        NSString *s2 = [s1 stringByReplacingOccurrencesOfString:[sectionsArray objectAtIndex:sectionVal - 1] withString:@""];
+        NSString *s2 = [s1 stringByReplacingOccurrencesOfString:@"<ref>" withString:@""];
+        NSString *s3 = [s2 stringByReplacingOccurrencesOfString:[sectionsArray objectAtIndex:sectionVal - 1] withString:@""];
         readingSynthesizer = [[AVSpeechSynthesizer alloc]init];
         [readingSynthesizer setDelegate:self];
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We will begin reading your article section now.  Please shake the device once to pause reading, and a second time to resume.                                           %@", s2]];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We will begin reading your article section now.  Please shake the device once to pause reading, and a second time to resume.                                           %@", s3]];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
         } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
@@ -468,7 +498,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     for (int i = 0; i < [sectionsArray count]; i++) {
         [verbalArray addObject:[[NSString stringWithFormat:@"Section %d: ", i + 1] stringByAppendingString:[sectionsArray objectAtIndex:i]]];
     }
-    completeSectionString = [verbalArray componentsJoinedByString:@","];
+    completeSectionString = [verbalArray componentsJoinedByString:@".       "];
     NSLog(@"%@", completeSectionString);
     [self performSelector:@selector(speakTable) withObject:nil afterDelay:3.0];
 }
@@ -556,7 +586,19 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 speakIndex = 1;
                 AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
                 [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't search for that.  Please speak your new search term after the vibration."];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't read that article.  Please speak your new search term after the vibration."];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                [speechSynthesizer speakUtterance:utterance];
+            }
+            else {
+                speakIndex = 2;
+                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+                [speechSynthesizer setDelegate:self];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
                 if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
                 } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
@@ -576,7 +618,8 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             NSLog(@"%@", recognizedVoice2);
             if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
                 [self searchWikipedia];
-            } else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"contents"]) {
+            }
+            else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"contents"]) {
                 NSLog(@"The user said no");
                 speechSynthesizer2 = [[AVSpeechSynthesizer alloc] init];
                 [speechSynthesizer2 setDelegate:self];
@@ -595,6 +638,18 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
                 if(connection1){
                     webData = [[NSMutableData alloc]init];
                 }
+            }
+            else {
+                speakIndex = 3;
+                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+                [speechSynthesizer setDelegate:self];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Do you want to listen to the introduction or the table of contents?"]];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                [speechSynthesizer speakUtterance:utterance];
             }
         }
         else if (speakIndex == 27) {
@@ -624,7 +679,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     [self.microphoneImage setHidden:NO];
     [self.waveformView setHidden:YES];
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
-    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[error.localizedDescription stringByAppendingString:@".  Please check your internet connection"]];
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[error.localizedDescription stringByAppendingString:@".  Please check your internet connection."]];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
         [utterance setRate:0.1];
     } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
