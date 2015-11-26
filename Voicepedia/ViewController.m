@@ -683,7 +683,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     [self.microphoneImage setHidden:NO];
     [self.waveformView setHidden:YES];
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
-    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[error.localizedDescription stringByAppendingString:@".  Please check your internet connection."]];
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"We can't read your article right now.  Please check your internet connection and make sure microphone access is enabled."];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
         [utterance setRate:0.1];
     } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
