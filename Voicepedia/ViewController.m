@@ -31,7 +31,7 @@
 
 @end
 
-const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0x50, 0x7f, 0x1c, 0xfb, 0x52, 0x79, 0xb6, 0x1e, 0x7e, 0x1c, 0x45, 0xdc, 0xb5, 0x59, 0x11, 0xfd, 0xd2, 0x51, 0x58, 0xf5, 0xa7, 0x4c, 0x13, 0x29, 0xa2, 0xbc, 0x03, 0x7e, 0x16, 0xa4, 0x87, 0x67, 0x23, 0xa3, 0x62, 0x75, 0x1c, 0x18, 0x94, 0x9a, 0x34, 0xd9, 0x77, 0xe9, 0x33, 0x88, 0xe6, 0x05, 0xd9, 0x3f, 0xfa, 0x80, 0x8b, 0x0d, 0xa9, 0x2d, 0xc9, 0xac, 0xab};
+const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0x61, 0xc1, 0x0f, 0x30, 0x0a, 0xde, 0xd8, 0x49, 0xe6, 0x27, 0xb9, 0x60, 0x81, 0xad, 0x49, 0x3f, 0x7f, 0x5e, 0x8e, 0xe5, 0x16, 0xa1, 0x8b, 0xa9, 0x3b, 0x3f, 0xea, 0x4d, 0x14, 0x37, 0x08, 0x75, 0xf8, 0x18, 0xa5, 0x02, 0xf6, 0x7d, 0x4c, 0xdc, 0xa5, 0x05, 0x3c, 0x26, 0xb2, 0x85, 0x65, 0x31, 0xe3, 0xf3, 0x17, 0xf9, 0x95, 0xa2, 0xa2, 0xd0, 0xe1, 0x8c, 0x1e};
 
 @implementation ViewController
 @synthesize logoLabel;
@@ -53,7 +53,11 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
     
     sectionsArray = [[NSMutableArray alloc]init];
     
-    [SpeechKit setupWithID:@"NMDPTRIAL_mlabtechnologies20150120004933" host:@"sslsandbox.nmdp.nuancemobility.net" port:443 useSSL:YES delegate:self];
+    [SpeechKit setupWithID:@"NMDPPRODUCTION_Michael_Royzen_Readr_20150405205027"
+                      host:@"dhw.nmdp.nuancemobility.net"
+                      port:443
+                    useSSL:YES
+                  delegate:nil];
     
     NSDictionary *settings = @{AVSampleRateKey:          [NSNumber numberWithFloat: 44100.0],
                                AVFormatIDKey:            [NSNumber numberWithInt: kAudioFormatAppleLossless],
@@ -285,7 +289,6 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
 }
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
     AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:error.localizedDescription];
     if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
@@ -404,9 +407,10 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
         idString = [NSString stringWithFormat:@"%@", [pageids firstObject]];
         NSLog(@"IDSTRING %@", idString);
         speakIndex++;
+        NSString *lowercaseString = [recognizedVoice2 lowercaseString];
         for (int i = 0; i < [verbalArray count]; i++) {
             NSString *string = [verbalArray objectAtIndex:i];
-            if ([string containsString:recognizedVoice2]) {
+            if ([string containsString:recognizedVoice2] || [string containsString:lowercaseString]) {
                 chosenSection = string;
                 sectionContent = string;
                 sectionVal = i + 1;
@@ -619,7 +623,7 @@ const unsigned char SpeechKitApplicationKey[] = {0xda, 0xdb, 0x5a, 0xa1, 0x09, 0
             if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
                 [self searchWikipedia];
             }
-            else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"contents"]) {
+            else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"Table"] || [recognizedVoice2 containsString:@"table"]) {
                 NSLog(@"The user said no");
                 speechSynthesizer2 = [[AVSpeechSynthesizer alloc] init];
                 [speechSynthesizer2 setDelegate:self];
