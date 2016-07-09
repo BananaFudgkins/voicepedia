@@ -101,14 +101,23 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         speakIndex = 1;
         shakeIndex = 0;
     } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionUndetermined) {
-        AVSpeechUtterance *uttterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia.  To begin searching Wikipeida hands free, please allow access to your device's microphone."];
+        AVSpeechUtterance *uttterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia.  To begin searching Wikipedia hands free, please allow access to your device's microphone."];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [uttterance setRate:0.1];
         } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
             [uttterance setRate:0.5];
         }
         [speechSynthesizer speakUtterance:uttterance];
-        speakIndex = 0;
+        speakIndex = 1;
+    } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionDenied) {
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia. You cannot search Wikipedia hands free because you have denied access to your device's microphone."];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [utterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [utterance setRate:0.5];
+        }
+        [speechSynthesizer speakUtterance:utterance];
+        speakIndex = 1;
     }
     
     // Do any additional setup after loading the view, typically from a nib.

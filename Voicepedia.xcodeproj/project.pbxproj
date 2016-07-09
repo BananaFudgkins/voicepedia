@@ -275,6 +275,7 @@
 					AC1B01DE1BC9A89200504FDE = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = NLW324UDS8;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
