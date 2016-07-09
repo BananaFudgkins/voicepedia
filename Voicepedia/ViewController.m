@@ -90,15 +90,26 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
     [speechSynthesizer setDelegate:self];
-    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Welcome to Voicepedia.  Please speak your search term after the vibration."];
-    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-        [utterance setRate:0.1];
-    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-        [utterance setRate:0.5];
+    if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionGranted) {
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Welcome to Voicepedia.  Please speak your search term after the vibration."];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [utterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [utterance setRate:0.5];
+        }
+        [speechSynthesizer speakUtterance:utterance];
+        speakIndex = 1;
+        shakeIndex = 0;
+    } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionUndetermined) {
+        AVSpeechUtterance *uttterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia.  To begin searching Wikipeida hands free, please allow access to your device's microphone."];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [uttterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [uttterance setRate:0.5];
+        }
+        [speechSynthesizer speakUtterance:uttterance];
+        speakIndex = 0;
     }
-    [speechSynthesizer speakUtterance:utterance];
-    speakIndex = 1;
-    shakeIndex = 0;
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -122,7 +133,23 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 }
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
-    if (speakIndex == 1) {
+    if (speakIndex == 0) {
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+            if (granted) {
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Thank you for granting microphone access. Please speak your search term after the vibration"];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                
+                [synthesizer speakUtterance:utterance];
+                speakIndex = 1;
+                shakeIndex = 0;
+            }
+        }];
+    }
+    else if (speakIndex == 1) {
         SKEndOfSpeechDetection detectionType;
         NSString* recoType;
         recoType = SKDictationRecognizerType;
