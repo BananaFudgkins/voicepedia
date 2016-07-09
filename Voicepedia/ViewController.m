@@ -108,7 +108,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             [uttterance setRate:0.5];
         }
         [speechSynthesizer speakUtterance:uttterance];
-        speakIndex = 1;
+        speakIndex = 0;
     } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionDenied) {
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia. You cannot search Wikipedia hands free because you have denied access to your device's microphone."];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
@@ -117,7 +117,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             [utterance setRate:0.5];
         }
         [speechSynthesizer speakUtterance:utterance];
-        speakIndex = 1;
+        speakIndex = 0;
     }
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -159,16 +159,19 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         }];
     }
     else if (speakIndex == 1) {
-        SKEndOfSpeechDetection detectionType;
-        NSString* recoType;
-        recoType = SKDictationRecognizerType;
-        detectionType = SKLongEndOfSpeechDetection;
+        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+            SKEndOfSpeechDetection detectionType;
+            NSString* recoType;
+            recoType = SKDictationRecognizerType;
+            detectionType = SKLongEndOfSpeechDetection;
         
-        voiceSearch = [[SKRecognizer alloc] initWithType:recoType
+            voiceSearch = [[SKRecognizer alloc] initWithType:recoType
                                                detection:detectionType
                                                 language:@"en_US"
                                                 delegate:self];
+        }
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        
         
         [self.recorder prepareToRecord];
         [self.recorder setMeteringEnabled:YES];

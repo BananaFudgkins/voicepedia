@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68947C111D3165F3006857D7 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68947C0F1D3165F3006857D7 /* Interface.storyboard */; };
+		68947C131D3165F3006857D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68947C121D3165F3006857D7 /* Assets.xcassets */; };
+		68947C1A1D3165F3006857D7 /* VoiceWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 68947C191D3165F3006857D7 /* VoiceWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		68947C221D3165F3006857D7 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68947C211D3165F3006857D7 /* InterfaceController.m */; };
+		68947C251D3165F3006857D7 /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 68947C241D3165F3006857D7 /* ExtensionDelegate.m */; };
+		68947C281D3165F3006857D7 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68947C271D3165F3006857D7 /* NotificationController.m */; };
+		68947C2A1D3165F3006857D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68947C291D3165F3006857D7 /* Assets.xcassets */; };
+		68947C2E1D3165F3006857D7 /* VoiceWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 68947C0D1D3165F2006857D7 /* VoiceWatch.app */; };
+		68947C371D31662C006857D7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68947C361D31662C006857D7 /* AVFoundation.framework */; };
 		68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AC519F1BC9FD6F00159581 /* SpeechKit.framework */; };
 		68ED77411BC9FFA800248FCB /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */; };
 		AC1B01E41BC9A89200504FDE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E31BC9A89200504FDE /* main.m */; };
@@ -26,6 +35,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		68947C1B1D3165F3006857D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC1B01D71BC9A89200504FDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68947C181D3165F3006857D7;
+			remoteInfo = "VoiceWatch Extension";
+		};
+		68947C2C1D3165F3006857D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC1B01D71BC9A89200504FDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68947C0C1D3165F2006857D7;
+			remoteInfo = VoiceWatch;
+		};
 		AC1B01F91BC9A89200504FDE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AC1B01D71BC9A89200504FDE /* Project object */;
@@ -49,6 +72,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
+				68947C2E1D3165F3006857D7 /* VoiceWatch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,9 +87,35 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		68947C321D3165F3006857D7 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				68947C1A1D3165F3006857D7 /* VoiceWatch Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		68947C0D1D3165F2006857D7 /* VoiceWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		68947C101D3165F3006857D7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		68947C121D3165F3006857D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		68947C141D3165F3006857D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		68947C191D3165F3006857D7 /* VoiceWatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "VoiceWatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		68947C1F1D3165F3006857D7 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		68947C201D3165F3006857D7 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		68947C211D3165F3006857D7 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		68947C231D3165F3006857D7 /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
+		68947C241D3165F3006857D7 /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
+		68947C261D3165F3006857D7 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		68947C271D3165F3006857D7 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		68947C291D3165F3006857D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		68947C2B1D3165F3006857D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		68947C361D31662C006857D7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		68AC519F1BC9FD6F00159581 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechKit.framework; sourceTree = "<group>"; };
 		68ED773F1BC9FFA800248FCB /* SCSiriWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSiriWaveformView.h; sourceTree = "<group>"; };
 		68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSiriWaveformView.m; sourceTree = "<group>"; };
@@ -95,6 +145,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		68947C161D3165F3006857D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68947C371D31662C006857D7 /* AVFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AC1B01DC1BC9A89200504FDE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -125,9 +183,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		68947C0E1D3165F3006857D7 /* VoiceWatch */ = {
+			isa = PBXGroup;
+			children = (
+				68947C0F1D3165F3006857D7 /* Interface.storyboard */,
+				68947C121D3165F3006857D7 /* Assets.xcassets */,
+				68947C141D3165F3006857D7 /* Info.plist */,
+			);
+			path = VoiceWatch;
+			sourceTree = "<group>";
+		};
+		68947C1D1D3165F3006857D7 /* VoiceWatch Extension */ = {
+			isa = PBXGroup;
+			children = (
+				68947C201D3165F3006857D7 /* InterfaceController.h */,
+				68947C211D3165F3006857D7 /* InterfaceController.m */,
+				68947C231D3165F3006857D7 /* ExtensionDelegate.h */,
+				68947C241D3165F3006857D7 /* ExtensionDelegate.m */,
+				68947C261D3165F3006857D7 /* NotificationController.h */,
+				68947C271D3165F3006857D7 /* NotificationController.m */,
+				68947C291D3165F3006857D7 /* Assets.xcassets */,
+				68947C2B1D3165F3006857D7 /* Info.plist */,
+				68947C1E1D3165F3006857D7 /* Supporting Files */,
+			);
+			path = "VoiceWatch Extension";
+			sourceTree = "<group>";
+		};
+		68947C1E1D3165F3006857D7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				68947C1F1D3165F3006857D7 /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		68AC519E1BC9FBE800159581 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68947C361D31662C006857D7 /* AVFoundation.framework */,
 				68AC519F1BC9FD6F00159581 /* SpeechKit.framework */,
 				ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */,
 				ACC80D021BC9B07700BA7229 /* SystemConfiguration.framework */,
@@ -144,6 +237,8 @@
 				AC1B01E11BC9A89200504FDE /* Voicepedia */,
 				AC1B01FB1BC9A89200504FDE /* VoicepediaTests */,
 				AC1B02061BC9A89200504FDE /* VoicepediaUITests */,
+				68947C0E1D3165F3006857D7 /* VoiceWatch */,
+				68947C1D1D3165F3006857D7 /* VoiceWatch Extension */,
 				AC1B01E01BC9A89200504FDE /* Products */,
 				68AC519E1BC9FBE800159581 /* Frameworks */,
 			);
@@ -155,6 +250,8 @@
 				AC1B01DF1BC9A89200504FDE /* Voicepedia.app */,
 				AC1B01F81BC9A89200504FDE /* VoicepediaTests.xctest */,
 				AC1B02031BC9A89200504FDE /* VoicepediaUITests.xctest */,
+				68947C0D1D3165F2006857D7 /* VoiceWatch.app */,
+				68947C191D3165F3006857D7 /* VoiceWatch Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,6 +305,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		68947C0C1D3165F2006857D7 /* VoiceWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68947C331D3165F3006857D7 /* Build configuration list for PBXNativeTarget "VoiceWatch" */;
+			buildPhases = (
+				68947C0B1D3165F2006857D7 /* Resources */,
+				68947C321D3165F3006857D7 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				68947C1C1D3165F3006857D7 /* PBXTargetDependency */,
+			);
+			name = VoiceWatch;
+			productName = VoiceWatch;
+			productReference = 68947C0D1D3165F2006857D7 /* VoiceWatch.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		68947C181D3165F3006857D7 /* VoiceWatch Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68947C2F1D3165F3006857D7 /* Build configuration list for PBXNativeTarget "VoiceWatch Extension" */;
+			buildPhases = (
+				68947C151D3165F3006857D7 /* Sources */,
+				68947C161D3165F3006857D7 /* Frameworks */,
+				68947C171D3165F3006857D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "VoiceWatch Extension";
+			productName = "VoiceWatch Extension";
+			productReference = 68947C191D3165F3006857D7 /* VoiceWatch Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		AC1B01DE1BC9A89200504FDE /* Voicepedia */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AC1B020C1BC9A89200504FDE /* Build configuration list for PBXNativeTarget "Voicepedia" */;
@@ -221,6 +352,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				68947C2D1D3165F3006857D7 /* PBXTargetDependency */,
 			);
 			name = Voicepedia;
 			productName = Voicepedia;
@@ -272,6 +404,17 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Michael Royzen";
 				TargetAttributes = {
+					68947C0C1D3165F2006857D7 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = NLW324UDS8;
+						ProvisioningStyle = Manual;
+					};
+					68947C181D3165F3006857D7 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 85Q84CPFAN;
+						DevelopmentTeamName = "Banana Fudgkins";
+						ProvisioningStyle = Manual;
+					};
 					AC1B01DE1BC9A89200504FDE = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = NLW324UDS8;
@@ -308,11 +451,30 @@
 				AC1B01DE1BC9A89200504FDE /* Voicepedia */,
 				AC1B01F71BC9A89200504FDE /* VoicepediaTests */,
 				AC1B02021BC9A89200504FDE /* VoicepediaUITests */,
+				68947C0C1D3165F2006857D7 /* VoiceWatch */,
+				68947C181D3165F3006857D7 /* VoiceWatch Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		68947C0B1D3165F2006857D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68947C131D3165F3006857D7 /* Assets.xcassets in Resources */,
+				68947C111D3165F3006857D7 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		68947C171D3165F3006857D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68947C2A1D3165F3006857D7 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AC1B01DD1BC9A89200504FDE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -340,6 +502,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		68947C151D3165F3006857D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68947C251D3165F3006857D7 /* ExtensionDelegate.m in Sources */,
+				68947C221D3165F3006857D7 /* InterfaceController.m in Sources */,
+				68947C281D3165F3006857D7 /* NotificationController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AC1B01DB1BC9A89200504FDE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -371,6 +543,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		68947C1C1D3165F3006857D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 68947C181D3165F3006857D7 /* VoiceWatch Extension */;
+			targetProxy = 68947C1B1D3165F3006857D7 /* PBXContainerItemProxy */;
+		};
+		68947C2D1D3165F3006857D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 68947C0C1D3165F2006857D7 /* VoiceWatch */;
+			targetProxy = 68947C2C1D3165F3006857D7 /* PBXContainerItemProxy */;
+		};
 		AC1B01FA1BC9A89200504FDE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AC1B01DE1BC9A89200504FDE /* Voicepedia */;
@@ -384,6 +566,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		68947C0F1D3165F3006857D7 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				68947C101D3165F3006857D7 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		AC1B01EB1BC9A89200504FDE /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -403,6 +593,78 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		68947C301D3165F3006857D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				INFOPLIST_FILE = "VoiceWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mlabtechnologies.voicepedia.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		68947C311D3165F3006857D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				INFOPLIST_FILE = "VoiceWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mlabtechnologies.voicepedia.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Release;
+		};
+		68947C341D3165F3006857D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				IBSC_MODULE = VoiceWatch_Extension;
+				INFOPLIST_FILE = VoiceWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mlabtechnologies.voicepedia.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		68947C351D3165F3006857D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				IBSC_MODULE = VoiceWatch_Extension;
+				INFOPLIST_FILE = VoiceWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mlabtechnologies.voicepedia.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Release;
+		};
 		AC1B020A1BC9A89200504FDE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -576,6 +838,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		68947C2F1D3165F3006857D7 /* Build configuration list for PBXNativeTarget "VoiceWatch Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68947C301D3165F3006857D7 /* Debug */,
+				68947C311D3165F3006857D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		68947C331D3165F3006857D7 /* Build configuration list for PBXNativeTarget "VoiceWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68947C341D3165F3006857D7 /* Debug */,
+				68947C351D3165F3006857D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		AC1B01DA1BC9A89200504FDE /* Build configuration list for PBXProject "Voicepedia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
