@@ -30,6 +30,10 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>
 	</dict>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Voicepedia uses speech recognition to power voice search.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Voicepedia uses your microphone to power voice search.</string>
 	<key>WKExtensionDelegateClassName</key>
 	<string>ExtensionDelegate</string>
 </dict>

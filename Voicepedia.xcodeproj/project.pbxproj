@@ -17,6 +17,7 @@
 		68947C2E1D3165F3006857D7 /* VoiceWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 68947C0D1D3165F2006857D7 /* VoiceWatch.app */; };
 		68947C371D31662C006857D7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68947C361D31662C006857D7 /* AVFoundation.framework */; };
 		68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AC519F1BC9FD6F00159581 /* SpeechKit.framework */; };
+		68DBEA891D591B4E00CFE948 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68DBEA881D591B4E00CFE948 /* Speech.framework */; };
 		68ED77411BC9FFA800248FCB /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */; };
 		AC1B01E41BC9A89200504FDE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E31BC9A89200504FDE /* main.m */; };
 		AC1B01E71BC9A89200504FDE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E61BC9A89200504FDE /* AppDelegate.m */; };
@@ -117,6 +118,7 @@
 		68947C2B1D3165F3006857D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		68947C361D31662C006857D7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		68AC519F1BC9FD6F00159581 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechKit.framework; sourceTree = "<group>"; };
+		68DBEA881D591B4E00CFE948 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 		68ED773F1BC9FFA800248FCB /* SCSiriWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSiriWaveformView.h; sourceTree = "<group>"; };
 		68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSiriWaveformView.m; sourceTree = "<group>"; };
 		AC1B01DF1BC9A89200504FDE /* Voicepedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Voicepedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68DBEA891D591B4E00CFE948 /* Speech.framework in Frameworks */,
 				ACC80D051BC9B08B00BA7229 /* AudioToolbox.framework in Frameworks */,
 				ACC80D031BC9B07700BA7229 /* SystemConfiguration.framework in Frameworks */,
 				ACC80D011BC9B07000BA7229 /* QuartzCore.framework in Frameworks */,
@@ -220,6 +223,7 @@
 		68AC519E1BC9FBE800159581 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68DBEA881D591B4E00CFE948 /* Speech.framework */,
 				68947C361D31662C006857D7 /* AVFoundation.framework */,
 				68AC519F1BC9FD6F00159581 /* SpeechKit.framework */,
 				ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */,
@@ -845,6 +849,7 @@
 				68947C311D3165F3006857D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		68947C331D3165F3006857D7 /* Build configuration list for PBXNativeTarget "VoiceWatch" */ = {
 			isa = XCConfigurationList;
@@ -853,6 +858,7 @@
 				68947C351D3165F3006857D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AC1B01DA1BC9A89200504FDE /* Build configuration list for PBXProject "Voicepedia" */ = {
 			isa = XCConfigurationList;

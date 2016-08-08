@@ -10,6 +10,8 @@
 #import <SpeechKit/SpeechKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import <Speech/Speech.h>
+
 #import "GradientView.h"
 #import "SCSiriWaveformView.h"
 
@@ -28,6 +30,8 @@
 @property (strong, nonatomic) AVAudioRecorder *recorder;
 @property (strong, nonatomic) IBOutlet UIImageView *microphoneImage;
 @property (weak, nonatomic) IBOutlet UILabel *currentWordLabel;
+
+@property (strong, nonatomic) SFSpeechRecognitionTask *recognitionTask;
 
 @end
 

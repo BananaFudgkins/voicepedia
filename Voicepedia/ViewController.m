@@ -142,6 +142,10 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 }
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
+    if (self.recognitionTask) {
+        [self.recognitionTask cancel];
+    }
+    
     if (speakIndex == 0) {
         [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
             if (granted) {
@@ -169,6 +173,8 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                detection:detectionType
                                                 language:@"en_US"
                                                 delegate:self];
+        } else {
+            
         }
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         
