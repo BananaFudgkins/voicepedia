@@ -180,7 +180,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             // iOS 10 code.
             SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
             self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
-                
+                recognizedVoice = result.bestTranscription.formattedString;
             }];
         }
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -209,7 +209,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         } else {
             SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
             self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
-                
+                recognizedVoice2 = result.bestTranscription.formattedString;
             }];
         }
         
@@ -623,7 +623,9 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             [self.recorder stop];
             [self.microphoneImage setHidden:NO];
             [self.waveformView setHidden:YES];
-            recognizedVoice = [results firstResult];
+            if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+                recognizedVoice = [results firstResult];
+            }
             NSLog(@"%@", recognizedVoice);
             [self searchWikipedia];
             /*
@@ -644,44 +646,50 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             [self.recorder stop];
             [self.microphoneImage setHidden:NO];
             [self.waveformView setHidden:YES];
-            recognizedVoice2 = [results firstResult];
+            if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+                recognizedVoice2 = [results firstResult];
+            }
             speakIndex = 3;
             NSLog(@"%@", recognizedVoice2);
-            if ([recognizedVoice2 containsString:@"Yes"] || [recognizedVoice2 containsString:@"yes"]) {
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-                [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"Okay.  Do you want to listen to the introduction or the table of contents?"]];
-                //[self searchWikipedia];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
+            if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+                if ([recognizedVoice2 containsString:@"Yes"] || [recognizedVoice2 containsString:@"yes"]) {
+                    AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+                    [speechSynthesizer setDelegate:self];
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"Okay.  Do you want to listen to the introduction or the table of contents?"]];
+                    //[self searchWikipedia];
+                    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                        [utterance setRate:0.1];
+                    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                        [utterance setRate:0.5];
+                    }
+                    [speechSynthesizer speakUtterance:utterance];
+                } else if ([recognizedVoice2 containsString:@"No"] || [recognizedVoice2 containsString:@"no"]) {
+                    NSLog(@"The user said no");
+                    speakIndex = 1;
+                    AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+                    [speechSynthesizer setDelegate:self];
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't read that article.  Please speak your new search term after the vibration."];
+                    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                        [utterance setRate:0.1];
+                    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                        [utterance setRate:0.5];
+                    }
+                    [speechSynthesizer speakUtterance:utterance];
                 }
-                [speechSynthesizer speakUtterance:utterance];
-            } else if ([recognizedVoice2 containsString:@"No"] || [recognizedVoice2 containsString:@"no"]) {
-                NSLog(@"The user said no");
-                speakIndex = 1;
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
-                [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't read that article.  Please speak your new search term after the vibration."];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
+                else {
+                    speakIndex = 2;
+                    AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+                    [speechSynthesizer setDelegate:self];
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
+                    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                        [utterance setRate:0.1];
+                    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                        [utterance setRate:0.5];
+                    }
+                    [speechSynthesizer speakUtterance:utterance];
                 }
-                [speechSynthesizer speakUtterance:utterance];
-            }
-            else {
-                speakIndex = 2;
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-                [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
-                }
-                [speechSynthesizer speakUtterance:utterance];
+            } else {
+                
             }
         }
         else if (speakIndex == 3) {

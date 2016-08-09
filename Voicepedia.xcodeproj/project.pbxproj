@@ -15,7 +15,6 @@
 		68947C281D3165F3006857D7 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68947C271D3165F3006857D7 /* NotificationController.m */; };
 		68947C2A1D3165F3006857D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68947C291D3165F3006857D7 /* Assets.xcassets */; };
 		68947C2E1D3165F3006857D7 /* VoiceWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 68947C0D1D3165F2006857D7 /* VoiceWatch.app */; };
-		68947C371D31662C006857D7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68947C361D31662C006857D7 /* AVFoundation.framework */; };
 		68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AC519F1BC9FD6F00159581 /* SpeechKit.framework */; };
 		68DBEA891D591B4E00CFE948 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68DBEA881D591B4E00CFE948 /* Speech.framework */; };
 		68ED77411BC9FFA800248FCB /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */; };
@@ -151,7 +150,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				68947C371D31662C006857D7 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
