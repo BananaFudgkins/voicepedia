@@ -68,6 +68,8 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
     self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
     
+    self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
+    
     if (error) {
         AVSpeechSynthesizer *errorSynthesizer = [[AVSpeechSynthesizer alloc] init];
         
@@ -163,6 +165,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         }];
     }
     else if (speakIndex == 1) {
+        // iOS 9 and earlier code.
         if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
             SKEndOfSpeechDetection detectionType;
             NSString* recoType;
@@ -174,7 +177,11 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                 language:@"en_US"
                                                 delegate:self];
         } else {
-            
+            // iOS 10 code.
+            SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+                
+            }];
         }
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         
@@ -189,15 +196,22 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         [logoLabel setText:@"Listening"];
     }
     else if (speakIndex == 2) {
-        SKEndOfSpeechDetection detectionType;
-        NSString* recoType;
-        recoType = SKDictationRecognizerType;
-        detectionType = SKLongEndOfSpeechDetection;
-        
-        voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-                                               detection:detectionType
-                                                language:@"en_US"
-                                                delegate:self];
+        if([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+            SKEndOfSpeechDetection detectionType;
+            NSString* recoType;
+            recoType = SKDictationRecognizerType;
+            detectionType = SKLongEndOfSpeechDetection;
+            
+            voiceSearch = [[SKRecognizer alloc] initWithType:recoType
+                                                   detection:detectionType
+                                                    language:@"en_US"
+                                                    delegate:self];
+        } else {
+            SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+                
+            }];
+        }
         
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         
@@ -212,15 +226,22 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     }
     else if (speakIndex == 3) {
         NSLog(@"Third detect");
-        SKEndOfSpeechDetection detectionType;
-        NSString* recoType;
-        recoType = SKDictationRecognizerType;
-        detectionType = SKLongEndOfSpeechDetection;
-        
-        voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-                                               detection:detectionType
-                                                language:@"en_US"
-                                                delegate:self];
+        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+            SKEndOfSpeechDetection detectionType;
+            NSString* recoType;
+            recoType = SKDictationRecognizerType;
+            detectionType = SKLongEndOfSpeechDetection;
+            
+            voiceSearch = [[SKRecognizer alloc] initWithType:recoType
+                                                   detection:detectionType
+                                                    language:@"en_US"
+                                                    delegate:self];
+        } else {
+            SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+                
+            }];
+        }
         
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         
@@ -520,15 +541,22 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 }
 
 - (void)startListening {
-    SKEndOfSpeechDetection detectionType;
-    NSString* recoType;
-    recoType = SKDictationRecognizerType;
-    detectionType = SKLongEndOfSpeechDetection;
-    
-    voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-                                           detection:detectionType
-                                            language:@"en_US"
-                                            delegate:self];
+    if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+        SKEndOfSpeechDetection detectionType;
+        NSString* recoType;
+        recoType = SKDictationRecognizerType;
+        detectionType = SKLongEndOfSpeechDetection;
+        
+        voiceSearch = [[SKRecognizer alloc] initWithType:recoType
+                                               detection:detectionType
+                                                language:@"en_US"
+                                                delegate:self];
+    } else {
+        SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+        self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+            
+        }];
+    }
     
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     
