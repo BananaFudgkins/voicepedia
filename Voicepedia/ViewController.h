@@ -15,7 +15,7 @@
 #import "GradientView.h"
 #import "SCSiriWaveformView.h"
 
-@interface ViewController : UIViewController <SpeechKitDelegate, AVSpeechSynthesizerDelegate, SKRecognizerDelegate, NSURLConnectionDataDelegate> {
+@interface ViewController : UIViewController <SpeechKitDelegate, AVSpeechSynthesizerDelegate, SKRecognizerDelegate, NSURLConnectionDataDelegate, SFSpeechRecognitionTaskDelegate> {
     SKRecognizer *voiceSearch;
     enum {
         TS_IDLE,

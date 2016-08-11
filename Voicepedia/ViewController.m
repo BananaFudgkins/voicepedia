@@ -758,6 +758,24 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     [logoLabel setText:@"Voicepedia"];
 }
 
+- (void)speechRecognitionTask:(SFSpeechRecognitionTask *)task didFinishRecognition:(SFSpeechRecognitionResult *)recognitionResult {
+    if (recognitionResult.bestTranscription.formattedString == nil) {
+        [self.recorder stop];
+        [self.microphoneImage setHidden:NO];
+        [self.waveformView setHidden:YES];
+        recognizedVoice = recognitionResult.bestTranscription.formattedString;
+        AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+        [speechSynthesizer setDelegate:self];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [utterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [utterance setRate:0.5];
+        }
+        [speechSynthesizer speakUtterance:utterance];
+    }
+}
+
 - (void)recognizer:(SKRecognizer *)recognizer didFinishWithError:(NSError *)error suggestion:(NSString *)suggestion {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [self.recorder stop];
