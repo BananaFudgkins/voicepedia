@@ -20,6 +20,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>5</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Voicepedia uses your microphone to power voice search.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Voicepedia uses speech recognition to power voice search.</string>
 	<key>UIApplicationExitsOnSuspend</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -36,10 +40,6 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Voicepedia uses your microphone to power voice search.</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Voicepedia uses speech recognition to power voice search.</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

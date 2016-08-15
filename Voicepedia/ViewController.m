@@ -179,9 +179,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         } else {
             // iOS 10 code.
             SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
-            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
-                recognizedVoice = result.bestTranscription.formattedString;
-            }];
+            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest delegate:self];
         }
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         
@@ -208,9 +206,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                     delegate:self];
         } else {
             SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
-            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
-                recognizedVoice2 = result.bestTranscription.formattedString;
-            }];
+            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest delegate:self];
         }
         
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -238,9 +234,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                     delegate:self];
         } else {
             SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
-            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
-                
-            }];
+            self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest delegate:self];
         }
         
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -698,7 +692,9 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             [self.recorder stop];
             [self.microphoneImage setHidden:NO];
             [self.waveformView setHidden:YES];
-            recognizedVoice2 = [results firstResult];
+            if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+                recognizedVoice2 = [results firstResult];
+            }
             //speakIndex ++;
             NSLog(@"%@", recognizedVoice2);
             if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
