@@ -204,19 +204,13 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 NSLog(@"%@", recognizedVoice);
                 [self searchWikipedia];
 
-                if (result.isFinal) {
-                    NSLog(@"Result finalized.");
-                    [self.audioEngine stop];
-                    [self.recognitionRequest endAudio];
-                    [self.audioEngine.inputNode removeTapOnBus:0];
+                NSLog(@"Result finalized.");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                [self.audioEngine.inputNode removeTapOnBus:0];
 
-                    self.recognitionRequest = nil;
-                    self.recognitionTask = nil;
-
-                    if(self.recognitionRequest == nil && self.recognitionTask == nil) {
-                        NSLog(@"Both objects have been destroyed.");
-                    }
-                }
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
             }];
 
             inputNode = self.audioEngine.inputNode;
@@ -275,6 +269,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.recorder stop];
                 [self.microphoneImage setHidden:NO];
                 [self.waveformView setHidden:YES];
+                
                 recognizedVoice2 = result.bestTranscription.formattedString;
                 speakIndex = 3;
                 NSLog(@"%@", recognizedVoice2);
@@ -314,18 +309,18 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     [speechSynthesizer speakUtterance:utterance];
                 }
 
-                if(result.isFinal) {
-                    NSLog(@"Result has been finalized");
-                    [self.audioEngine stop];
-                    [inputNode removeTapOnBus:0];
-
-                    self.recognitionRequest = nil;
-                    self.recognitionTask = nil;
-                }
+                NSLog(@"Got the second result.");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                [self.audioEngine.inputNode removeTapOnBus:0];
+                
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
             }];
 
             inputNode = self.audioEngine.inputNode;
             AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
+            
             [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
                 [self.recognitionRequest appendAudioPCMBuffer:buffer];
             }];
@@ -369,7 +364,9 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 
             [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
             [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:nil];
-            [[AVAudioSession sharedInstance] setActive:YES error:nil];
+            [[AVAudioSession sharedInstance] setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
+                                                 error:nil];
+            AVAudioInputNode *inputNode;
 
             self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
             self.recognitionRequest.shouldReportPartialResults = YES;
@@ -406,19 +403,43 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                         webData = [[NSMutableData alloc]init];
                     }
                 }
+                
+                NSLog(@"Got the third result");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                [self.audioEngine.inputNode removeTapOnBus:0];
+                
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
             }];
+        
+            inputNode = self.audioEngine.inputNode;
+            AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
+        
+            if (inputNode.numberOfOutputs == 0) {
+                [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+                    [self.recognitionRequest appendAudioPCMBuffer:buffer];
+                }];
+            }
+        
+            [self.audioEngine prepare];
+        
+            [self.audioEngine startAndReturnError:nil];
+            if(self.audioEngine.isRunning) {
+                NSLog(@"The audio engine was started.");
+            }
+
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+
+            [self.recorder prepareToRecord];
+            [self.recorder setMeteringEnabled:YES];
+            [self.recorder record];
+
+            [self.microphoneImage setHidden:YES];
+            [self.waveformView setHidden:NO];
+
+            [logoLabel setText:@"Listening"];
         }
-
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-
-        [self.recorder prepareToRecord];
-        [self.recorder setMeteringEnabled:YES];
-        [self.recorder record];
-
-        [self.microphoneImage setHidden:YES];
-        [self.waveformView setHidden:NO];
-
-        [logoLabel setText:@"Listening"];
     }
     else if (speakIndex == 4) {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=%@", articleTitleString]];
