@@ -32,7 +32,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentWordLabel;
 
 @property (strong, nonatomic) SFSpeechRecognitionTask *recognitionTask;
+@property (strong, nonatomic) SFSpeechAudioBufferRecognitionRequest *recognitionRequest;
 @property (strong, nonatomic) SFSpeechRecognizer *speechRecognizer;
+@property (strong, nonatomic) AVAudioEngine *audioEngine;
 
 @end
 
