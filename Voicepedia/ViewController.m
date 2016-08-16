@@ -380,6 +380,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.recorder stop];
                 [self.waveformView setHidden:YES];
                 [self.microphoneImage setHidden:NO];
+                recognizedVoice2 = result.bestTranscription.formattedString;
 
                 NSLog(@"%@", recognizedVoice2);
                 if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
