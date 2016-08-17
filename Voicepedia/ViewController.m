@@ -270,13 +270,6 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.microphoneImage setHidden:NO];
                 [self.waveformView setHidden:YES];
                 
-                NSLog(@"Got the second result.");
-                [self.audioEngine stop];
-                [self.recognitionRequest endAudio];
-                [self.audioEngine.inputNode removeTapOnBus:0];
-                
-                self.recognitionRequest = nil;
-                self.recognitionTask = nil;
                 recognizedVoice2 = result.bestTranscription.formattedString;
                 speakIndex = 3;
                 
@@ -316,8 +309,14 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     }
                     [speechSynthesizer speakUtterance:utterance];
                 }
-
                 
+                NSLog(@"Result finalized.");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                [self.audioEngine.inputNode removeTapOnBus:0];
+                
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
             }];
 
             inputNode = self.audioEngine.inputNode;
@@ -381,19 +380,11 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.microphoneImage setHidden:NO];
                 recognizedVoice2 = result.bestTranscription.formattedString;
                 
-                NSLog(@"Got the third result");
-                [self.audioEngine stop];
-                [self.recognitionRequest endAudio];
-                [self.audioEngine.inputNode removeTapOnBus:0];
-                
-                self.recognitionRequest = nil;
-                self.recognitionTask = nil;
-                
                 NSLog(@"%@", recognizedVoice2);
                 if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
                     [self searchWikipedia];
                 }
-                else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"Table"] || [recognizedVoice2 containsString:@"table"]) {
+                else if ([recognizedVoice2 containsString:@"Contents"] || [recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"Table"] || [recognizedVoice2 containsString:@"table"]) {
                     NSLog(@"The user said no");
                     speechSynthesizer2 = [[AVSpeechSynthesizer alloc] init];
                     [speechSynthesizer2 setDelegate:self];
@@ -414,7 +405,13 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     }
                 }
                 
+                NSLog(@"Got the third result");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                [self.audioEngine.inputNode removeTapOnBus:0];
                 
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
             }];
         
             inputNode = self.audioEngine.inputNode;
