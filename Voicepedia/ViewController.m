@@ -270,8 +270,16 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.microphoneImage setHidden:NO];
                 [self.waveformView setHidden:YES];
                 
+                NSLog(@"Got the second result.");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                [self.audioEngine.inputNode removeTapOnBus:0];
+                
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
                 recognizedVoice2 = result.bestTranscription.formattedString;
                 speakIndex = 3;
+                
                 NSLog(@"%@", recognizedVoice2);
                 if ([recognizedVoice2 containsString:@"Yes"] || [recognizedVoice2 containsString:@"yes"]) {
                     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
@@ -309,13 +317,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     [speechSynthesizer speakUtterance:utterance];
                 }
 
-                NSLog(@"Got the second result.");
-                [self.audioEngine stop];
-                [self.recognitionRequest endAudio];
-                [self.audioEngine.inputNode removeTapOnBus:0];
                 
-                self.recognitionRequest = nil;
-                self.recognitionTask = nil;
             }];
 
             inputNode = self.audioEngine.inputNode;
@@ -378,7 +380,15 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.waveformView setHidden:YES];
                 [self.microphoneImage setHidden:NO];
                 recognizedVoice2 = result.bestTranscription.formattedString;
-
+                
+                NSLog(@"Got the third result");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                [self.audioEngine.inputNode removeTapOnBus:0];
+                
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
+                
                 NSLog(@"%@", recognizedVoice2);
                 if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
                     [self searchWikipedia];
@@ -404,23 +414,15 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     }
                 }
                 
-                NSLog(@"Got the third result");
-                [self.audioEngine stop];
-                [self.recognitionRequest endAudio];
-                [self.audioEngine.inputNode removeTapOnBus:0];
                 
-                self.recognitionRequest = nil;
-                self.recognitionTask = nil;
             }];
         
             inputNode = self.audioEngine.inputNode;
             AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
         
-            if (inputNode.numberOfOutputs == 0) {
-                [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
-                    [self.recognitionRequest appendAudioPCMBuffer:buffer];
-                }];
-            }
+            [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+                [self.recognitionRequest appendAudioPCMBuffer:buffer];
+            }];
         
             [self.audioEngine prepare];
         
