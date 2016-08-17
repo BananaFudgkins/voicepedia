@@ -250,17 +250,18 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                     language:@"en_US"
                                                     delegate:self];
         } else {
+            
             if(self.recognitionTask) {
                 [self.recognitionTask cancel];
                 self.recognitionTask = nil;
             }
-
+            
             [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
             [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:nil];
             [[AVAudioSession sharedInstance] setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-
+            
             AVAudioInputNode *inputNode;
-
+            
             self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
             self.recognitionRequest.shouldReportPartialResults = YES;
 
@@ -310,7 +311,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     [speechSynthesizer speakUtterance:utterance];
                 }
                 
-                NSLog(@"Result finalized.");
+                NSLog(@"Got the second result.");
                 [self.audioEngine stop];
                 [self.recognitionRequest endAudio];
                 [self.audioEngine.inputNode removeTapOnBus:0];
@@ -321,13 +322,12 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 
             inputNode = self.audioEngine.inputNode;
             AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
-            
             [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
                 [self.recognitionRequest appendAudioPCMBuffer:buffer];
             }];
-
+            
             [self.audioEngine prepare];
-
+            
             [self.audioEngine startAndReturnError:nil];
             if(self.audioEngine.isRunning) {
                 NSLog(@"The audio engine was started.");
@@ -405,24 +405,29 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     }
                 }
                 
-                NSLog(@"Got the third result");
-                [self.audioEngine stop];
-                [self.recognitionRequest endAudio];
-                [self.audioEngine.inputNode removeTapOnBus:0];
-                
-                self.recognitionRequest = nil;
-                self.recognitionTask = nil;
+                if(inputNode.numberOfOutputs != 0) {
+                    NSLog(@"Got the third result");
+                    [self.audioEngine stop];
+                    [self.recognitionRequest endAudio];
+                    [self.audioEngine.inputNode removeTapOnBus:0];
+                    
+                    self.recognitionRequest = nil;
+                    self.recognitionTask = nil;
+                }
             }];
         
             inputNode = self.audioEngine.inputNode;
             AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
-        
-            [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
-                [self.recognitionRequest appendAudioPCMBuffer:buffer];
-            }];
-        
+            if(inputNode.numberOfOutputs == 0) {
+                [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+                    [self.recognitionRequest appendAudioPCMBuffer:buffer];
+                }];
+            } else {
+                NSLog(@"Oh noes there are still some busses on this caboose.");
+            }
+            
             [self.audioEngine prepare];
-        
+            
             [self.audioEngine startAndReturnError:nil];
             if(self.audioEngine.isRunning) {
                 NSLog(@"The audio engine was started.");
