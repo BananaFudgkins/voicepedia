@@ -68,7 +68,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
     self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
 
-    self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
+    self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[NSLocale currentLocale]];
     self.audioEngine = [[AVAudioEngine alloc] init];
 
     if (error) {
@@ -315,6 +315,11 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.audioEngine stop];
                 [self.recognitionRequest endAudio];
                 [self.audioEngine.inputNode removeTapOnBus:0];
+                if(self.audioEngine.inputNode.numberOfOutputs == 0) {
+                    NSLog(@"The deed has been done.");
+                } else {
+                    NSLog(@"Oh noes there are still busses on this caboose.");
+                }
                 
                 self.recognitionRequest = nil;
                 self.recognitionTask = nil;
@@ -405,26 +410,24 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                     }
                 }
                 
-                if(inputNode.numberOfOutputs != 0) {
-                    NSLog(@"Got the third result");
-                    [self.audioEngine stop];
-                    [self.recognitionRequest endAudio];
-                    [self.audioEngine.inputNode removeTapOnBus:0];
-                    
-                    self.recognitionRequest = nil;
-                    self.recognitionTask = nil;
+                NSLog(@"Got the third result");
+                [self.audioEngine stop];
+                [self.recognitionRequest endAudio];
+                if(self.audioEngine.inputNode.numberOfOutputs == 0) {
+                    NSLog(@"For the third time, there are no busses on this caboose");
+                } else {
+                    NSLog(@"For the third time, there are some busses on this caboose");
                 }
+                    
+                self.recognitionRequest = nil;
+                self.recognitionTask = nil;
             }];
         
             inputNode = self.audioEngine.inputNode;
             AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
-            if(inputNode.numberOfOutputs == 0) {
-                [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
-                    [self.recognitionRequest appendAudioPCMBuffer:buffer];
-                }];
-            } else {
-                NSLog(@"Oh noes there are still some busses on this caboose.");
-            }
+            [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+                [self.recognitionRequest appendAudioPCMBuffer:buffer];
+            }];
             
             [self.audioEngine prepare];
             
