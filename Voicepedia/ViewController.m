@@ -260,7 +260,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:nil];
             [[AVAudioSession sharedInstance] setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
             
-            AVAudioInputNode *inputNode;
+            AVAudioInputNode *inputNode = self.audioEngine.inputNode;
             
             self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
             self.recognitionRequest.shouldReportPartialResults = YES;
@@ -325,7 +325,6 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 self.recognitionTask = nil;
             }];
 
-            inputNode = self.audioEngine.inputNode;
             AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
             [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
                 [self.recognitionRequest appendAudioPCMBuffer:buffer];
@@ -372,7 +371,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:nil];
             [[AVAudioSession sharedInstance] setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
                                                  error:nil];
-            AVAudioInputNode *inputNode;
+            AVAudioInputNode *inputNode = self.audioEngine.inputNode;
 
             self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
             self.recognitionRequest.shouldReportPartialResults = YES;
@@ -385,6 +384,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.microphoneImage setHidden:NO];
                 recognizedVoice2 = result.bestTranscription.formattedString;
                 
+                [self.audioEngine.inputNode removeTapOnBus:0];
                 NSLog(@"%@", recognizedVoice2);
                 if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
                     [self searchWikipedia];
@@ -423,11 +423,12 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 self.recognitionTask = nil;
             }];
         
-            inputNode = self.audioEngine.inputNode;
             AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
-            [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
-                [self.recognitionRequest appendAudioPCMBuffer:buffer];
-            }];
+            if (inputNode.numberOfOutputs == 0) {
+                [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
+                    [self.recognitionRequest appendAudioPCMBuffer:buffer];
+                }];
+            }
             
             [self.audioEngine prepare];
             
