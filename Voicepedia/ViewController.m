@@ -266,6 +266,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             self.recognitionRequest.shouldReportPartialResults = YES;
 
             self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:self.recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
+                
                 [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
                 [self.recorder stop];
                 [self.microphoneImage setHidden:NO];
@@ -315,11 +316,6 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [self.audioEngine stop];
                 [self.recognitionRequest endAudio];
                 [self.audioEngine.inputNode removeTapOnBus:0];
-                if(self.audioEngine.inputNode.numberOfOutputs == 0) {
-                    NSLog(@"The deed has been done.");
-                } else {
-                    NSLog(@"Oh noes there are still busses on this caboose.");
-                }
                 
                 self.recognitionRequest = nil;
                 self.recognitionTask = nil;
