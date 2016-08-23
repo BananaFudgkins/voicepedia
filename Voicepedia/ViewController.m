@@ -234,6 +234,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                     delegate:self];
         } else {
             // iOS 10 code.
+            [self beginSpeechRecognition];
         }
         
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -590,43 +591,6 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     SFSpeechRecognitionRequest *recognitionRequest = _recognitionRequest;
     recognitionRequest.shouldReportPartialResults = YES;
     
-    /* _recognitionTask = [_speechRecognizer recognitionTaskWithRequest:recognitionRequest resultHandler:^(SFSpeechRecognitionResult * _Nullable result, NSError * _Nullable error) {
-        BOOL isFinal = false;
-        
-        if(result) {
-            NSLog(@"Processing the result...");
-            
-            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-            [self.recorder stop];
-            [self.microphoneImage setHidden:NO];
-            [self.waveformView setHidden:YES];
-            
-            switch (speakIndex) {
-                case 1:
-                    recognizedVoice = result.bestTranscription.formattedString;
-                    NSLog(@"%@", recognizedVoice);
-                    break;
-                case 2:
-                    recognizedVoice2 = result.bestTranscription.formattedString;
-                    break;
-                    
-                default:
-                    break;
-            }
-            isFinal = result.isFinal;
-        }
-        
-        if(error || isFinal == true) {
-            [self.audioEngine stop];
-            [inputNode removeTapOnBus:0];
-            
-            self.recognitionRequest = nil;
-            self.recognitionTask = nil;
-            
-            [logoLabel setText:@"Voicepedia"];
-        }
-    }]; */
-    
     _recognitionTask = [_speechRecognizer recognitionTaskWithRequest:recognitionRequest delegate:self];
     
     AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
@@ -832,10 +796,17 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 }
 
 - (void)speechRecognitionTask:(SFSpeechRecognitionTask *)task didHypothesizeTranscription:(SFTranscription *)transcription {
+    
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [self.recorder stop];
     [self.microphoneImage setHidden:NO];
     [self.waveformView setHidden:YES];
+    
+    [self.audioEngine stop];
+    [self.audioEngine.inputNode removeTapOnBus:0];
+    
+    self.recognitionRequest = nil;
+    self.recognitionTask = nil;
     
     switch (speakIndex) {
         case 1:
@@ -875,6 +846,45 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
                 [speechSynthesizer setDelegate:self];
                 AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                [speechSynthesizer speakUtterance:utterance];
+            }
+            break;
+        case 3:
+            recognizedVoice2 = transcription.formattedString;
+            NSLog(@"%@", recognizedVoice2);
+            if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
+                [self searchWikipedia];
+            }
+            else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"Table"] || [recognizedVoice2 containsString:@"table"]) {
+                NSLog(@"The user said no");
+                speechSynthesizer2 = [[AVSpeechSynthesizer alloc] init];
+                [speechSynthesizer2 setDelegate:self];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we will read the table of contents now."];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                [speechSynthesizer2 speakUtterance:utterance];
+                speakIndex = 26;
+                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=sections&page=%@&redirects", articleTitleString]];
+                NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+                NSLog(@"URL 5%@", url);
+                connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+                if(connection1){
+                    webData = [[NSMutableData alloc]init];
+                }
+            }
+            else {
+                speakIndex = 3;
+                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
+                [speechSynthesizer setDelegate:self];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Do you want to listen to the introduction or the table of contents?"]];
                 if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
                 } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
