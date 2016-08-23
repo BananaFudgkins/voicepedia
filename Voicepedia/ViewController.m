@@ -548,18 +548,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                 language:@"en_US"
                                                 delegate:self];
     } else {
-        NSError *audioError;
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord mode:AVAudioSessionModeMeasurement options:AVAudioSessionCategoryOptionDefaultToSpeaker error:&audioError];
-        [[AVAudioSession sharedInstance] setActive:YES error:&audioError];
-
-        SFSpeechAudioBufferRecognitionRequest *recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
-        self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:recognitionRequest delegate:self];
-
-        [self.audioEngine prepare];
-
-        NSError *error;
-        [self.audioEngine startAndReturnError:&error];
-        NSLog(@"The audio engine was started");
+        [self beginSpeechRecognition];
     }
 
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -892,6 +881,19 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 }
                 [speechSynthesizer speakUtterance:utterance];
             }
+            break;
+        case 27: {
+            recognizedVoice2 = transcription.formattedString;
+            speakIndex ++;
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=query&titles=%@&indexpageids=&format=json", articleTitleString]];
+            NSLog(@"Article title string %@", articleTitleString);
+            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+            NSLog(@"%@", url);
+            connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+            if(connection1){
+                webData = [[NSMutableData alloc]init];
+            }
+        }
             break;
             
         default:
