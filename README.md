@@ -10,18 +10,13 @@ This README would normally document whatever steps are necessary to get your app
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Download Xcode, pull from the repo, and write some code. Deployment will be done by the staff at Mlab Technologies.
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Create clear, concise commit messages
+* Indicate if the code is entirely stable or not
+* Contributions are great
 
 ### Who do I talk to? ###
 
