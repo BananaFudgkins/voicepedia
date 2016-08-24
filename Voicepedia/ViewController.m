@@ -268,7 +268,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 
         readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
         [readingSynthesizer setDelegate:self];
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"Please shake the device once to pause reading, and a second time to resume.                                           " stringByAppendingString:extract]];
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"Please shake the device once to pause reading, and a second time to resume." stringByAppendingString:extract]];
         if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
             [utterance setRate:0.1];
         } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
