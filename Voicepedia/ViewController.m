@@ -152,7 +152,8 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     if (speakIndex == 0) {
         [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
             if (granted) {
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Thank you for granting microphone access. Please speak your search term after the vibration"];
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Thank you for granting microphone access. Please speak your search term after the vibration."];
+                
                 if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
                     [utterance setRate:0.1];
                 } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
@@ -162,12 +163,21 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [synthesizer speakUtterance:utterance];
                 speakIndex = 1;
                 shakeIndex = 0;
+            } else {
+                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"You have not granted microphone access. You will not be able to search Wikipedia hands free."];
+                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                    [utterance setRate:0.1];
+                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                    [utterance setRate:0.5];
+                }
+                
+                [synthesizer speakUtterance:utterance];
             }
         }];
     }
     else if (speakIndex == 1) {
         // iOS 9 and earlier code.
-        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
             SKEndOfSpeechDetection detectionType;
             NSString* recoType;
             recoType = SKDictationRecognizerType;
@@ -177,7 +187,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                detection:detectionType
                                                 language:@"en_US"
                                                 delegate:self];
-        } else {
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
             // iOS 10 code.
             [self beginSpeechRecognition];
         }
@@ -194,7 +204,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         [logoLabel setText:@"Listening"];
     }
     else if (speakIndex == 2) {
-        if([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+        if([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
             SKEndOfSpeechDetection detectionType;
             NSString* recoType;
             recoType = SKDictationRecognizerType;
@@ -204,7 +214,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                    detection:detectionType
                                                     language:@"en_US"
                                                     delegate:self];
-        } else {
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
             // iOS 10 code.
             [self beginSpeechRecognition];
         }
@@ -222,7 +232,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     }
     else if (speakIndex == 3) {
         NSLog(@"Third detect");
-        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
             SKEndOfSpeechDetection detectionType;
             NSString* recoType;
             recoType = SKDictationRecognizerType;
@@ -232,7 +242,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                    detection:detectionType
                                                     language:@"en_US"
                                                     delegate:self];
-        } else {
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
             // iOS 10 code.
             [self beginSpeechRecognition];
         }
@@ -537,7 +547,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 }
 
 - (void)startListening {
-    if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3) {
+    if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
         SKEndOfSpeechDetection detectionType;
         NSString* recoType;
         recoType = SKDictationRecognizerType;
@@ -547,7 +557,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                                                detection:detectionType
                                                 language:@"en_US"
                                                 delegate:self];
-    } else {
+    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
         [self beginSpeechRecognition];
     }
 
