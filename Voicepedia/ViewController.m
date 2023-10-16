@@ -17,12 +17,10 @@
     NSString *articleTitleString;
     NSString *idString;
     NSString *extract;
-    AVSpeechSynthesizer *readingSynthesizer;
     int shakeIndex;
     int tableIndex;
     NSMutableArray *sectionsArray;
     NSString *completeSectionString;
-    AVSpeechSynthesizer *speechSynthesizer2;
     NSString *chosenSection;
     NSString *sectionContent;
     int sectionVal;
@@ -31,11 +29,84 @@
 
 @end
 
-const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0x61, 0xc1, 0x0f, 0x30, 0x0a, 0xde, 0xd8, 0x49, 0xe6, 0x27, 0xb9, 0x60, 0x81, 0xad, 0x49, 0x3f, 0x7f, 0x5e, 0x8e, 0xe5, 0x16, 0xa1, 0x8b, 0xa9, 0x3b, 0x3f, 0xea, 0x4d, 0x14, 0x37, 0x08, 0x75, 0xf8, 0x18, 0xa5, 0x02, 0xf6, 0x7d, 0x4c, 0xdc, 0xa5, 0x05, 0x3c, 0x26, 0xb2, 0x85, 0x65, 0x31, 0xe3, 0xf3, 0x17, 0xf9, 0x95, 0xa2, 0xa2, 0xd0, 0xe1, 0x8c, 0x1e};
-
 @implementation ViewController
 @synthesize logoLabel;
 @synthesize currentWordLabel;
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    currentWordLabel.text = @"";
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    shakeIndex = 0;
+    speakIndex = 1;
+    tableIndex = 0;
+    
+    self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
+    self.audioEngine = [[AVAudioEngine alloc] init];
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    self.speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
+    self.speechSynthesizer.delegate = self;
+    
+    if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionGranted) {
+        if ([SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Welcome to Voicepedia.  Please speak your search term after the vibration."];
+            if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                [utterance setRate:0.1];
+            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                [utterance setRate:0.5];
+            }
+            [self.speechSynthesizer speakUtterance:utterance];
+            speakIndex = 1;
+            shakeIndex = 0;
+        } else if ([SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusNotDetermined) {
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia. To begin searching Wikipedia hands free, please allow access to speech recognition."];
+            [utterance setRate:0.5];
+            
+            [self.speechSynthesizer speakUtterance:utterance];
+            speakIndex = 0;
+            /* [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus status) {
+                if (status == SFSpeechRecognizerAuthorizationStatusAuthorized) {
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Thank you for granting access to speech recognition. Please speak your search term after the vibration."];
+                    [utterance setRate:0.5];
+                    
+                    [self.speechSynthesizer speakUtterance:utterance];
+                    speakIndex = 1;
+                    shakeIndex = 0;
+                }
+            }]; */
+        } else if ([SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"You cannot search Wikipedia hands free because you have denied access to speech recognition."];
+            [utterance setRate:0.5];
+            
+            [self.speechSynthesizer speakUtterance:utterance];
+            speakIndex = 0;
+        }
+    } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionUndetermined) {
+        AVSpeechUtterance *uttterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia.  To begin searching Wikipedia hands free, please allow access to your device's microphone."];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [uttterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [uttterance setRate:0.5];
+        }
+        [self.speechSynthesizer speakUtterance:uttterance];
+        speakIndex = 0;
+    } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionDenied) {
+        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia. You cannot search Wikipedia hands free because you have denied access to your device's microphone."];
+        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+            [utterance setRate:0.1];
+        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            [utterance setRate:0.5];
+        }
+        [self.speechSynthesizer speakUtterance:utterance];
+        speakIndex = 0;
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,20 +115,10 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     [self.view addSubview:gradientView];
     [self.view sendSubviewToBack:gradientView];
 
-    voiceSearch = nil;
-    shakeIndex = 0;
-    speakIndex = 1;
-    tableIndex = 0;
-    [readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
-    readingSynthesizer = nil;
+    [self.readingSynthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    self.readingSynthesizer = nil;
 
     sectionsArray = [[NSMutableArray alloc]init];
-
-    [SpeechKit setupWithID:@"NMDPPRODUCTION_Michael_Royzen_Readr_20150405205027"
-                      host:@"dhw.nmdp.nuancemobility.net"
-                      port:443
-                    useSSL:YES
-                  delegate:nil];
 
     NSDictionary *settings = @{AVSampleRateKey:          [NSNumber numberWithFloat: 44100.0],
                                AVFormatIDKey:            [NSNumber numberWithInt: kAudioFormatAppleLossless],
@@ -68,8 +129,8 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
     self.recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
 
-    self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[NSLocale currentLocale]];
-    self.audioEngine = [[AVAudioEngine alloc] init];
+    // self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:[NSLocale currentLocale]];
+    self.impactGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
 
     if (error) {
         AVSpeechSynthesizer *errorSynthesizer = [[AVSpeechSynthesizer alloc] init];
@@ -89,41 +150,9 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     [self.waveformView setWaveColor:[UIColor whiteColor]];
     [self.waveformView setPrimaryWaveLineWidth:3.0f];
     [self.waveformView setSecondaryWaveLineWidth:1.0];
-
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-    [speechSynthesizer setDelegate:self];
-    if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionGranted) {
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:@"Welcome to Voicepedia.  Please speak your search term after the vibration."];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-            [utterance setRate:0.5];
-        }
-        [speechSynthesizer speakUtterance:utterance];
-        speakIndex = 1;
-        shakeIndex = 0;
-    } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionUndetermined) {
-        AVSpeechUtterance *uttterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia.  To begin searching Wikipedia hands free, please allow access to your device's microphone."];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [uttterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-            [uttterance setRate:0.5];
-        }
-        [speechSynthesizer speakUtterance:uttterance];
-        speakIndex = 0;
-    } else if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionDenied) {
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Welcome to Voicepedia. You cannot search Wikipedia hands free because you have denied access to your device's microphone."];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-            [utterance setRate:0.5];
-        }
-        [speechSynthesizer speakUtterance:utterance];
-        speakIndex = 0;
-    }
-
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.adBannerView.adUnitID = @"ca-app-pub-3940256099942544/2934735716"; // Currently a test ID. Should replace with value in Info.plist for release.
+    [self.adBannerView loadRequest:[GADRequest request]];
 }
 
 - (void)updateMeters
@@ -150,113 +179,47 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     }
 
     if (speakIndex == 0) {
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (granted) {
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Thank you for granting microphone access. Please speak your search term after the vibration."];
-                
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+        NSLog(@"Asking for access to user's microphone...");
+        if ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionUndetermined) {
+            [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+                if (granted) {
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Thank you for granting microphone access. Now please grant access to speech recognition."];
                     [utterance setRate:0.5];
+                    
+                    [synthesizer speakUtterance:utterance];
+                } else {
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"You have not granted microphone access. You will not be able to search Wikipedia hands free."];
+                    if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
+                        [utterance setRate:0.1];
+                    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+                        [utterance setRate:0.5];
+                    }
+                    
+                    [synthesizer speakUtterance:utterance];
                 }
-
-                [synthesizer speakUtterance:utterance];
-                speakIndex = 1;
-                shakeIndex = 0;
-            } else {
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"You have not granted microphone access. You will not be able to search Wikipedia hands free."];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
+            }];
+        } else if ([SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusNotDetermined) {
+            [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus status) {
+                if (status == SFSpeechRecognizerAuthorizationStatusAuthorized) {
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Thank you for granting speech recognition access. Please speak your search term after the vibration."];
                     [utterance setRate:0.5];
+                    
+                    [synthesizer speakUtterance:utterance];
+                    speakIndex = 1;
+                    shakeIndex = 0;
                 }
-                
-                [synthesizer speakUtterance:utterance];
-            }
-        }];
+            }];
+        }
     }
     else if (speakIndex == 1) {
-        // iOS 9 and earlier code.
-        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
-            SKEndOfSpeechDetection detectionType;
-            NSString* recoType;
-            recoType = SKDictationRecognizerType;
-            detectionType = SKLongEndOfSpeechDetection;
-
-            voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-                                               detection:detectionType
-                                                language:@"en_US"
-                                                delegate:self];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
-            // iOS 10 code.
-            [self beginSpeechRecognition];
-        }
-        
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-
-        [self.recorder prepareToRecord];
-        [self.recorder setMeteringEnabled:YES];
-        [self.recorder record];
-
-        [self.microphoneImage setHidden:YES];
-        [self.waveformView setHidden:NO];
-
-        [logoLabel setText:@"Listening"];
+        [self startListening];
     }
     else if (speakIndex == 2) {
-        if([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
-            SKEndOfSpeechDetection detectionType;
-            NSString* recoType;
-            recoType = SKDictationRecognizerType;
-            detectionType = SKLongEndOfSpeechDetection;
-
-            voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-                                                   detection:detectionType
-                                                    language:@"en_US"
-                                                    delegate:self];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
-            // iOS 10 code.
-            [self beginSpeechRecognition];
-        }
-
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-
-        [self.recorder prepareToRecord];
-        [self.recorder setMeteringEnabled:YES];
-        [self.recorder record];
-
-        [self.microphoneImage setHidden:YES];
-        [self.waveformView setHidden:NO];
-
-        [logoLabel setText:@"Listening"];
+        [self startListening];
     }
     else if (speakIndex == 3) {
         NSLog(@"Third detect");
-        if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
-            SKEndOfSpeechDetection detectionType;
-            NSString* recoType;
-            recoType = SKDictationRecognizerType;
-            detectionType = SKLongEndOfSpeechDetection;
-
-            voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-                                                   detection:detectionType
-                                                    language:@"en_US"
-                                                    delegate:self];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
-            // iOS 10 code.
-            [self beginSpeechRecognition];
-        }
-        
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-
-        [self.recorder prepareToRecord];
-        [self.recorder setMeteringEnabled:YES];
-        [self.recorder record];
-
-        [self.microphoneImage setHidden:YES];
-        [self.waveformView setHidden:NO];
-
-        [logoLabel setText:@"Listening"];
+        [self startListening];
     }
     else if (speakIndex == 4) {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=%@", articleTitleString]];
@@ -268,34 +231,22 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         }
     }
     else if (speakIndex == 5) {
-
+        
         speakIndex = 6;
 
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         [self.recorder stop];
         [self.waveformView setHidden:YES];
         [self.microphoneImage setHidden:NO];
-
-        readingSynthesizer = [[AVSpeechSynthesizer alloc] init];
-        [readingSynthesizer setDelegate:self];
+        
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:[@"Please shake the device once to pause reading, and a second time to resume.                                           " stringByAppendingString:extract]];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-            [utterance setRate:0.5];
-        }
-        [readingSynthesizer speakUtterance:utterance];
+        [utterance setRate:0.5];
+        [self.readingSynthesizer speakUtterance:utterance];
     }
     else if (speakIndex == 6 || speakIndex == 29) {
-        AVSpeechSynthesizer *synth = [[AVSpeechSynthesizer alloc] init];
-        [synth setDelegate:self];
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"We have finished reading your article.  Please speak your new search term after the vibration."];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-            [utterance setRate:0.5];
-        }
-        [synth speakUtterance:utterance];
+        [utterance setRate:0.5];
+        [self.speechSynthesizer speakUtterance:utterance];
         speakIndex = 1;
     }
     else if (speakIndex == 27) {
@@ -329,21 +280,21 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     if (motion == UIEventSubtypeMotionShake) {
         NSLog(@"Shake %d", shakeIndex);
         if (speakIndex == 6) {
-            [readingSynthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryWord];
+            [self.readingSynthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryWord];
             speakIndex++;
         }
         else if (shakeIndex == 1) {
             NSLog(@"ShakeIndex %d", shakeIndex);
-            [readingSynthesizer continueSpeaking];
+            [self.readingSynthesizer continueSpeaking];
             shakeIndex--;
             speakIndex = 6;
         }
         else if (speakIndex == 29) {
-            [readingSynthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryWord];
+            [self.readingSynthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryWord];
             speakIndex ++;
         }
         else if (speakIndex == 30) {
-            [readingSynthesizer continueSpeaking];
+            [self.readingSynthesizer continueSpeaking];
             speakIndex --;
         }
     }
@@ -357,6 +308,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 {
     [webData appendData:data];
 }
+
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
@@ -390,20 +342,13 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         }
         if (speakIndex == 1) {
             NSLog(@"Recognized the article.");
+            
             NSString *revisedTitleString = [articleTitleString stringByReplacingOccurrencesOfString:@"%20" withString:@" "];
-            AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-            [speechSynthesizer setDelegate:self];
             AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We found an article called %@.  Is this correct?", revisedTitleString]];
-            if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                [utterance setRate:0.1];
-            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                [utterance setRate:0.5];
-            }
-            [speechSynthesizer speakUtterance:utterance];
+            [utterance setRate:0.5];
+            [self.speechSynthesizer speakUtterance:utterance];
         }
         else {
-            AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-            [speechSynthesizer setDelegate:self];
             AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We will read the article intro now."]];
             NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?format=json&action=query&list=search&srsearch=%@", recognizedVoice]];
             NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
@@ -412,12 +357,8 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             if(connection1){
                 webData = [[NSMutableData alloc]init];
             }
-            if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                [utterance setRate:0.1];
-            } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                [utterance setRate:0.5];
-            }
-            [speechSynthesizer speakUtterance:utterance];
+            [utterance setRate:0.5];
+            [self.speechSynthesizer speakUtterance:utterance];
         }
         speakIndex++;
     }
@@ -522,20 +463,14 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         NSString *s1 = [sectionContent stringByReplacingOccurrencesOfString:@"=" withString:@""];
         NSString *s2 = [s1 stringByReplacingOccurrencesOfString:@"<ref>" withString:@""];
         NSString *s3 = [s2 stringByReplacingOccurrencesOfString:[sectionsArray objectAtIndex:sectionVal - 1] withString:@""];
-        readingSynthesizer = [[AVSpeechSynthesizer alloc]init];
-        [readingSynthesizer setDelegate:self];
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We will begin reading your article section now.  Please shake the device once to pause reading, and a second time to resume.                                           %@", s3]];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-            [utterance setRate:0.5];
-        }
-        [readingSynthesizer speakUtterance:utterance];
+        [utterance setRate:0.5];
+        [self.readingSynthesizer speakUtterance:utterance];
     }
 }
 
 
-- (void)recognizerDidBeginRecording:(SKRecognizer *)recognizer {
+/* - (void)recognizerDidBeginRecording:(SKRecognizer *)recognizer {
     NSLog(@"Recording started");
     [currentWordLabel setHidden:YES];
 }
@@ -544,24 +479,12 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     NSLog(@"Recording finished");
     [currentWordLabel setText:@""];
     [currentWordLabel setHidden:NO];
-}
+} */
 
 - (void)startListening {
-    if ([[UIDevice currentDevice] systemVersion].floatValue <= 9.3 || [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusDenied) {
-        SKEndOfSpeechDetection detectionType;
-        NSString* recoType;
-        recoType = SKDictationRecognizerType;
-        detectionType = SKLongEndOfSpeechDetection;
-
-        voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-                                               detection:detectionType
-                                                language:@"en_US"
-                                                delegate:self];
-    } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [SFSpeechRecognizer authorizationStatus] == SFSpeechRecognizerAuthorizationStatusAuthorized) {
-        [self beginSpeechRecognition];
-    }
-
-    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+    [self beginSpeechRecognition];
+    
+    [self.impactGenerator impactOccurred];
 
     [self.recorder prepareToRecord];
     [self.recorder setMeteringEnabled:YES];
@@ -574,8 +497,8 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 }
 
 - (void)beginSpeechRecognition {
-    if(_recognitionTask) {
-        [_recognitionTask cancel];
+    if(self.recognitionTask) {
+        [self.recognitionTask cancel];
         self.recognitionTask = nil;
     }
     
@@ -584,32 +507,123 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     [audioSession setMode:AVAudioSessionModeMeasurement error:nil];
     [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     
-    _recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
+    self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
     
-    AVAudioInputNode *inputNode = _audioEngine.inputNode;
-    SFSpeechRecognitionRequest *recognitionRequest = _recognitionRequest;
-    recognitionRequest.shouldReportPartialResults = YES;
+    AVAudioInputNode *inputNode = self.audioEngine.inputNode;
     
-    _recognitionTask = [_speechRecognizer recognitionTaskWithRequest:recognitionRequest delegate:self];
+    self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:self.recognitionRequest delegate:self];
     
     AVAudioFormat *recordingFormat = [inputNode outputFormatForBus:0];
     [inputNode installTapOnBus:0 bufferSize:1024 format:recordingFormat block:^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when) {
         [self.recognitionRequest appendAudioPCMBuffer:buffer];
     }];
     
-    [_audioEngine prepare];
+    [self.audioEngine prepare];
     
     @try {
-        [_audioEngine startAndReturnError:nil];
+        [self.audioEngine startAndReturnError:nil];
     } @catch (NSException *exception) {
         NSLog(@"The engine could not be started");
     } @finally {
-        if(_audioEngine.isRunning) {
+        if(self.audioEngine.isRunning) {
             NSLog(@"The audio engine was started.");
+            currentWordLabel.hidden = YES;
         }
     }
-    
-    [logoLabel setText:@"Listening"];
+}
+
+- (void)processResult:(NSString *)result {
+    if (result) {
+        NSLog(@"Processing result: %@", result);
+        currentWordLabel.text = @"";
+        currentWordLabel.hidden = NO;
+        
+        [self.recorder stop];
+        [self.microphoneImage setHidden:NO];
+        [self.waveformView setHidden:YES];
+        
+        [self.recognitionRequest endAudio];
+        [self.audioEngine.inputNode removeTapOnBus:0];
+        [self.audioEngine stop];
+        
+        self.recognitionRequest = nil;
+        self.recognitionTask = nil;
+        
+        switch (speakIndex) {
+            case 1:
+                recognizedVoice = result;
+                NSLog(@"Recognized voice: %@", recognizedVoice);
+                [self searchWikipedia];
+                break;
+            case 2:
+                recognizedVoice2 = result;
+                speakIndex = 3;
+                NSLog(@"%@", recognizedVoice2);
+                if ([recognizedVoice2 containsString:@"Yes"] || [recognizedVoice2 containsString:@"yes"]) {
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"Okay.  Do you want to listen to the introduction or the table of contents?"]];
+                    [utterance setRate:0.5];
+                    [self.speechSynthesizer speakUtterance:utterance];
+                } else if ([recognizedVoice2 containsString:@"No"] || [recognizedVoice2 containsString:@"no"]) {
+                    NSLog(@"The user said no");
+                    self.speechSynthesizer2 = [[AVSpeechSynthesizer alloc] init];
+                    self.speechSynthesizer2.delegate = self;
+                    speakIndex = 1;
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't read that article.  Please speak your new search term after the vibration."];
+                    [utterance setRate:0.5];
+                    [self.speechSynthesizer2 speakUtterance:utterance];
+                } else {
+                    speakIndex = 2;
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
+                    [utterance setRate:0.5];
+                    [self.speechSynthesizer speakUtterance:utterance];
+                }
+                break;
+            case 3:
+                recognizedVoice2 = result;
+                NSLog(@"%@", recognizedVoice2);
+                if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
+                    [self searchWikipedia];
+                }
+                else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"Table"] || [recognizedVoice2 containsString:@"table"]) {
+                    NSLog(@"The user said no");
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we will read the table of contents now."];
+                    [utterance setRate:0.5];
+                    [self.speechSynthesizer speakUtterance:utterance];
+                    speakIndex = 26;
+                    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=sections&page=%@&redirects", articleTitleString]];
+                    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+                    NSLog(@"URL 5%@", url);
+                    connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+                    if(connection1){
+                        webData = [[NSMutableData alloc]init];
+                    }
+                }
+                else {
+                    speakIndex = 3;
+                    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Do you want to listen to the introduction or the table of contents?"]];
+                    [utterance setRate:0.5];
+                    [self.speechSynthesizer speakUtterance:utterance];
+                }
+                break;
+            case 27: {
+                recognizedVoice2 = result;
+                speakIndex ++;
+                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=query&titles=%@&indexpageids=&format=json", articleTitleString]];
+                NSLog(@"Article title string %@", articleTitleString);
+                NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+                NSLog(@"%@", url);
+                connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+                if(connection1){
+                    webData = [[NSMutableData alloc]init];
+                }
+            }
+                break;
+                
+            default:
+                break;
+        }
+        logoLabel.text = @"Voicepedia";
+    }
 }
 
 - (void)readTableOfContents {
@@ -623,21 +637,15 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
 }
 
 - (void)speakTable {
-    if (![speechSynthesizer2 isSpeaking]) {
-        AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-        [speechSynthesizer setDelegate:self];
+    if (![self.speechSynthesizer2 isSpeaking]) {
         AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"%@.  Which section do you want to listen to?", completeSectionString]];
-        if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-            [utterance setRate:0.1];
-        } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-            [utterance setRate:0.5];
-        }
-        [speechSynthesizer speakUtterance:utterance];
+        [utterance setRate:0.5];
+        [self.speechSynthesizer speakUtterance:utterance];
         speakIndex = 27;
     }
 }
 
-- (void)recognizer:(SKRecognizer *)recognizer didFinishWithResults:(SKRecognition *)results {
+/* - (void)recognizer:(SKRecognizer *)recognizer didFinishWithResults:(SKRecognition *)results {
     NSLog(@"Got results");
     NSLog(@"Session ID: [%@].", [SpeechKit sessionID]);
 
@@ -671,7 +679,6 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
             }
             NSLog(@"%@", recognizedVoice);
             [self searchWikipedia];
-            /*
             speakIndex++;
             AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
             [speechSynthesizer setDelegate:self];
@@ -682,7 +689,6 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
                 [utterance setRate:0.5];
             }
             [speechSynthesizer speakUtterance:utterance];
-             */
         }
         else if (speakIndex == 2) {
             [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
@@ -793,128 +799,27 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     }
 
     [logoLabel setText:@"Voicepedia"];
+} */
+
+#pragma mark - Speech recogtion delegate
+
+- (void)speechRecognitionDidDetectSpeech:(SFSpeechRecognitionTask *)task {
 }
 
 - (void)speechRecognitionTask:(SFSpeechRecognitionTask *)task didHypothesizeTranscription:(SFTranscription *)transcription {
-    
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [self.recorder stop];
-    [self.microphoneImage setHidden:NO];
-    [self.waveformView setHidden:YES];
-    
-    [self.audioEngine stop];
-    [self.audioEngine.inputNode removeTapOnBus:0];
-    
-    self.recognitionRequest = nil;
-    self.recognitionTask = nil;
-    
-    switch (speakIndex) {
-        case 1:
-            recognizedVoice = transcription.formattedString;
-            NSLog(@"%@", recognizedVoice);
-            [self searchWikipedia];
-            break;
-        case 2:
-            recognizedVoice2 = transcription.formattedString;
-            speakIndex = 3;
-            NSLog(@"%@", recognizedVoice2);
-            if ([recognizedVoice2 containsString:@"Yes"] || [recognizedVoice2 containsString:@"yes"]) {
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-                [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"Okay.  Do you want to listen to the introduction or the table of contents?"]];
-                //[self searchWikipedia];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
-                }
-                [speechSynthesizer speakUtterance:utterance];
-            } else if ([recognizedVoice2 containsString:@"No"] || [recognizedVoice2 containsString:@"no"]) {
-                NSLog(@"The user said no");
-                speakIndex = 1;
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc] init];
-                [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we won't read that article.  Please speak your new search term after the vibration."];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
-                }
-                [speechSynthesizer speakUtterance:utterance];
-            } else {
-                speakIndex = 2;
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-                [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Please try again after the vibration."]];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
-                }
-                [speechSynthesizer speakUtterance:utterance];
+    if (task.state == SFSpeechRecognitionTaskStateRunning) {
+        [self.speechTimer invalidate];
+        self.speechTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(processResult:) userInfo:transcription.formattedString repeats:NO];
+    } else if (task.state == SFSpeechRecognitionTaskStateStarting) {
+        self.speechTimer = [NSTimer scheduledTimerWithTimeInterval:2 repeats:NO block:^(NSTimer * _Nonnull timer) {
+            if (timer.isValid) {
+                NSLog(@"Timing silence...");
             }
-            break;
-        case 3:
-            recognizedVoice2 = transcription.formattedString;
-            NSLog(@"%@", recognizedVoice2);
-            if ([recognizedVoice2 containsString:@"Introduction"] || [recognizedVoice2 containsString:@"introduction"]) {
-                [self searchWikipedia];
-            }
-            else if ([recognizedVoice2 containsString:@"contents"] || [recognizedVoice2 containsString:@"Table"] || [recognizedVoice2 containsString:@"table"]) {
-                NSLog(@"The user said no");
-                speechSynthesizer2 = [[AVSpeechSynthesizer alloc] init];
-                [speechSynthesizer2 setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:@"Ok, we will read the table of contents now."];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
-                }
-                [speechSynthesizer2 speakUtterance:utterance];
-                speakIndex = 26;
-                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=sections&page=%@&redirects", articleTitleString]];
-                NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-                NSLog(@"URL 5%@", url);
-                connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
-                if(connection1){
-                    webData = [[NSMutableData alloc]init];
-                }
-            }
-            else {
-                speakIndex = 3;
-                AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
-                [speechSynthesizer setDelegate:self];
-                AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc]initWithString:[NSString stringWithFormat:@"We're sorry, we didn't catch what you said.  Do you want to listen to the introduction or the table of contents?"]];
-                if ([[UIDevice currentDevice] systemVersion].floatValue >= 8.0 && [[UIDevice currentDevice] systemVersion].floatValue < 9.0) {
-                    [utterance setRate:0.1];
-                } else if ([[UIDevice currentDevice] systemVersion].floatValue >= 9.0) {
-                    [utterance setRate:0.5];
-                }
-                [speechSynthesizer speakUtterance:utterance];
-            }
-            break;
-        case 27: {
-            recognizedVoice2 = transcription.formattedString;
-            speakIndex ++;
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://en.wikipedia.org/w/api.php?action=query&titles=%@&indexpageids=&format=json", articleTitleString]];
-            NSLog(@"Article title string %@", articleTitleString);
-            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-            NSLog(@"%@", url);
-            connection1 = [NSURLConnection connectionWithRequest:urlRequest delegate:self];
-            if(connection1){
-                webData = [[NSMutableData alloc]init];
-            }
-        }
-            break;
-            
-        default:
-            break;
+        }];
     }
-    
-    [logoLabel setText:@"Voicepedia"];
 }
 
-- (void)recognizer:(SKRecognizer *)recognizer didFinishWithError:(NSError *)error suggestion:(NSString *)suggestion {
+/* - (void)recognizer:(SKRecognizer *)recognizer didFinishWithError:(NSError *)error suggestion:(NSString *)suggestion {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [self.recorder stop];
     [self.microphoneImage setHidden:NO];
@@ -927,7 +832,7 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
         [utterance setRate:0.5];
     }
     [speechSynthesizer speakUtterance:utterance];
-}
+} */
 
 - (void)searchWikipedia {
     NSLog(@"Searching...");
@@ -939,6 +844,14 @@ const unsigned char SpeechKitApplicationKey[] = {0x41, 0x12, 0xd5, 0x4d, 0xbb, 0
     if(connection1){
         webData = [[NSMutableData alloc]init];
     }
+    
+    // This is code for the new, non-deprecated way of getting stuff from the API.
+    /* NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (data) {
+            NSLog(@"Got a response.");
+        }
+    }];
+    [dataTask resume]; */
 }
 
 - (void)didReceiveMemoryWarning {

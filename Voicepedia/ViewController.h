@@ -7,16 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <SpeechKit/SpeechKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <Speech/Speech.h>
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import "GradientView.h"
 #import "SCSiriWaveformView.h"
 
-@interface ViewController : UIViewController <SpeechKitDelegate, AVSpeechSynthesizerDelegate, SKRecognizerDelegate, NSURLConnectionDataDelegate, SFSpeechRecognitionTaskDelegate> {
-    SKRecognizer *voiceSearch;
+@interface ViewController : UIViewController <AVSpeechSynthesizerDelegate, NSURLConnectionDataDelegate, SFSpeechRecognitionTaskDelegate> {
     enum {
         TS_IDLE,
         TS_INITIAL,
@@ -30,11 +29,18 @@
 @property (strong, nonatomic) AVAudioRecorder *recorder;
 @property (strong, nonatomic) IBOutlet UIImageView *microphoneImage;
 @property (weak, nonatomic) IBOutlet UILabel *currentWordLabel;
+@property (strong, nonatomic) IBOutlet GADBannerView *adBannerView;
 
 @property (strong, nonatomic) SFSpeechRecognitionTask *recognitionTask;
 @property (strong, nonatomic) SFSpeechAudioBufferRecognitionRequest *recognitionRequest;
 @property (strong, nonatomic) SFSpeechRecognizer *speechRecognizer;
 @property (strong, nonatomic) AVAudioEngine *audioEngine;
+@property (strong, nonatomic) NSTimer *speechTimer;
+@property (strong, nonatomic) UIImpactFeedbackGenerator *impactGenerator;
+
+@property (strong, nonatomic) AVSpeechSynthesizer *speechSynthesizer;
+@property (strong, nonatomic) AVSpeechSynthesizer *speechSynthesizer2;
+@property (strong, nonatomic) AVSpeechSynthesizer *readingSynthesizer;
 
 @end
 

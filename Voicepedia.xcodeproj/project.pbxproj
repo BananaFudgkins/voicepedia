@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AC519F1BC9FD6F00159581 /* SpeechKit.framework */; };
 		68DBEA891D591B4E00CFE948 /* Speech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68DBEA881D591B4E00CFE948 /* Speech.framework */; };
 		68ED77411BC9FFA800248FCB /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */; };
+		7ACC8F43810B79362560F9CE /* Pods_Voicepedia_VoicepediaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2585FEE5FB1A12E87027468 /* Pods_Voicepedia_VoicepediaUITests.framework */; };
+		805ACE16122BBB47F6AF2AED /* Pods_VoicepediaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D8E3CECCC97507EEE7F981 /* Pods_VoicepediaTests.framework */; };
 		AC1B01E41BC9A89200504FDE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E31BC9A89200504FDE /* main.m */; };
 		AC1B01E71BC9A89200504FDE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E61BC9A89200504FDE /* AppDelegate.m */; };
 		AC1B01EA1BC9A89200504FDE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC1B01E91BC9A89200504FDE /* ViewController.m */; };
@@ -24,6 +25,7 @@
 		ACC80D031BC9B07700BA7229 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D021BC9B07700BA7229 /* SystemConfiguration.framework */; };
 		ACC80D051BC9B08B00BA7229 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */; };
 		ACC80D081BC9B17900BA7229 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC80D071BC9B17900BA7229 /* GradientView.m */; };
+		AFD17015BAF941B7B3D9B9DF /* Pods_Voicepedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F02B72C8C4E34CE41F16C28A /* Pods_Voicepedia.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,8 +69,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04D8E3CECCC97507EEE7F981 /* Pods_VoicepediaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoicepediaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		08D9C587F99949409480B79D /* Pods-Voicepedia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Voicepedia.release.xcconfig"; path = "Target Support Files/Pods-Voicepedia/Pods-Voicepedia.release.xcconfig"; sourceTree = "<group>"; };
 		68947C361D31662C006857D7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
-		68AC519F1BC9FD6F00159581 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechKit.framework; sourceTree = "<group>"; };
 		68DBEA881D591B4E00CFE948 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 		68ED773F1BC9FFA800248FCB /* SCSiriWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSiriWaveformView.h; sourceTree = "<group>"; };
 		68ED77401BC9FFA800248FCB /* SCSiriWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSiriWaveformView.m; sourceTree = "<group>"; };
@@ -95,6 +98,13 @@
 		ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		ACC80D061BC9B17900BA7229 /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientView.h; sourceTree = "<group>"; };
 		ACC80D071BC9B17900BA7229 /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientView.m; sourceTree = "<group>"; };
+		B2585FEE5FB1A12E87027468 /* Pods_Voicepedia_VoicepediaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Voicepedia_VoicepediaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B89E9F318785845027CE228C /* Pods-VoicepediaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoicepediaTests.release.xcconfig"; path = "Target Support Files/Pods-VoicepediaTests/Pods-VoicepediaTests.release.xcconfig"; sourceTree = "<group>"; };
+		C9CEDD74B770226DC70BADD2 /* Pods-Voicepedia-VoicepediaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Voicepedia-VoicepediaUITests.release.xcconfig"; path = "Target Support Files/Pods-Voicepedia-VoicepediaUITests/Pods-Voicepedia-VoicepediaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		CF84FA94C733B0BC151F3258 /* Pods-VoicepediaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoicepediaTests.debug.xcconfig"; path = "Target Support Files/Pods-VoicepediaTests/Pods-VoicepediaTests.debug.xcconfig"; sourceTree = "<group>"; };
+		DF64B24914B4DC8BED607BE7 /* Pods-Voicepedia-VoicepediaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Voicepedia-VoicepediaUITests.debug.xcconfig"; path = "Target Support Files/Pods-Voicepedia-VoicepediaUITests/Pods-Voicepedia-VoicepediaUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		F02B72C8C4E34CE41F16C28A /* Pods_Voicepedia.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Voicepedia.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2176C6EDADC7D1B5BB60B73 /* Pods-Voicepedia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Voicepedia.debug.xcconfig"; path = "Target Support Files/Pods-Voicepedia/Pods-Voicepedia.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,9 +116,9 @@
 				ACC80D051BC9B08B00BA7229 /* AudioToolbox.framework in Frameworks */,
 				ACC80D031BC9B07700BA7229 /* SystemConfiguration.framework in Frameworks */,
 				ACC80D011BC9B07000BA7229 /* QuartzCore.framework in Frameworks */,
-				68AC51A01BC9FD6F00159581 /* SpeechKit.framework in Frameworks */,
 				ACC80CFF1BC9B06B00BA7229 /* CoreGraphics.framework in Frameworks */,
 				ACC80CFD1BC9B06400BA7229 /* AVFoundation.framework in Frameworks */,
+				AFD17015BAF941B7B3D9B9DF /* Pods_Voicepedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				805ACE16122BBB47F6AF2AED /* Pods_VoicepediaTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,23 +134,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7ACC8F43810B79362560F9CE /* Pods_Voicepedia_VoicepediaUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		434D338B7D6ADA44A66E2A9C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F2176C6EDADC7D1B5BB60B73 /* Pods-Voicepedia.debug.xcconfig */,
+				08D9C587F99949409480B79D /* Pods-Voicepedia.release.xcconfig */,
+				DF64B24914B4DC8BED607BE7 /* Pods-Voicepedia-VoicepediaUITests.debug.xcconfig */,
+				C9CEDD74B770226DC70BADD2 /* Pods-Voicepedia-VoicepediaUITests.release.xcconfig */,
+				CF84FA94C733B0BC151F3258 /* Pods-VoicepediaTests.debug.xcconfig */,
+				B89E9F318785845027CE228C /* Pods-VoicepediaTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		68AC519E1BC9FBE800159581 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				68DBEA881D591B4E00CFE948 /* Speech.framework */,
 				68947C361D31662C006857D7 /* AVFoundation.framework */,
-				68AC519F1BC9FD6F00159581 /* SpeechKit.framework */,
 				ACC80D041BC9B08B00BA7229 /* AudioToolbox.framework */,
 				ACC80D021BC9B07700BA7229 /* SystemConfiguration.framework */,
 				ACC80D001BC9B07000BA7229 /* QuartzCore.framework */,
 				ACC80CFE1BC9B06B00BA7229 /* CoreGraphics.framework */,
 				ACC80CFC1BC9B06400BA7229 /* AVFoundation.framework */,
+				F02B72C8C4E34CE41F16C28A /* Pods_Voicepedia.framework */,
+				B2585FEE5FB1A12E87027468 /* Pods_Voicepedia_VoicepediaUITests.framework */,
+				04D8E3CECCC97507EEE7F981 /* Pods_VoicepediaTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -152,6 +179,7 @@
 				AC1B02061BC9A89200504FDE /* VoicepediaUITests */,
 				AC1B01E01BC9A89200504FDE /* Products */,
 				68AC519E1BC9FBE800159581 /* Frameworks */,
+				434D338B7D6ADA44A66E2A9C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -218,11 +246,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AC1B020C1BC9A89200504FDE /* Build configuration list for PBXNativeTarget "Voicepedia" */;
 			buildPhases = (
+				5A1FFE285FEAECC122A98C4B /* [CP] Check Pods Manifest.lock */,
 				AC1B01DB1BC9A89200504FDE /* Sources */,
 				AC1B01DC1BC9A89200504FDE /* Frameworks */,
 				AC1B01DD1BC9A89200504FDE /* Resources */,
 				681821F41BEFE2D000251199 /* Embed Watch Content */,
 				681822171BEFE2FC00251199 /* Embed App Extensions */,
+				CA7EE79C960458B3EFF6A605 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -237,6 +267,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AC1B020F1BC9A89200504FDE /* Build configuration list for PBXNativeTarget "VoicepediaTests" */;
 			buildPhases = (
+				E873EB50ACABC025DB210290 /* [CP] Check Pods Manifest.lock */,
 				AC1B01F41BC9A89200504FDE /* Sources */,
 				AC1B01F51BC9A89200504FDE /* Frameworks */,
 				AC1B01F61BC9A89200504FDE /* Resources */,
@@ -255,9 +286,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AC1B02121BC9A89200504FDE /* Build configuration list for PBXNativeTarget "VoicepediaUITests" */;
 			buildPhases = (
+				77BD6D6906C7E2421A8CAC0C /* [CP] Check Pods Manifest.lock */,
 				AC1B01FF1BC9A89200504FDE /* Sources */,
 				AC1B02001BC9A89200504FDE /* Frameworks */,
 				AC1B02011BC9A89200504FDE /* Resources */,
+				20092F78A393D67ED2508DA2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -303,6 +336,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -344,6 +378,119 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		20092F78A393D67ED2508DA2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Voicepedia-VoicepediaUITests/Pods-Voicepedia-VoicepediaUITests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Voicepedia-VoicepediaUITests/Pods-Voicepedia-VoicepediaUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5A1FFE285FEAECC122A98C4B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Voicepedia-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		77BD6D6906C7E2421A8CAC0C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Voicepedia-VoicepediaUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CA7EE79C960458B3EFF6A605 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Voicepedia/Pods-Voicepedia-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Voicepedia/Pods-Voicepedia-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E873EB50ACABC025DB210290 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VoicepediaTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AC1B01DB1BC9A89200504FDE /* Sources */ = {
@@ -491,6 +638,7 @@
 		};
 		AC1B020D1BC9A89200504FDE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2176C6EDADC7D1B5BB60B73 /* Pods-Voicepedia.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -503,9 +651,9 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Voicepedia/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pixelbypixel.voicepedia;
+				PRODUCT_BUNDLE_IDENTIFIER = me.dejajackson.Voicepedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -514,6 +662,7 @@
 		};
 		AC1B020E1BC9A89200504FDE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 08D9C587F99949409480B79D /* Pods-Voicepedia.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -526,9 +675,9 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Voicepedia/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pixelbypixel.voicepedia;
+				PRODUCT_BUNDLE_IDENTIFIER = me.dejajackson.Voicepedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -537,6 +686,7 @@
 		};
 		AC1B02101BC9A89200504FDE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF84FA94C733B0BC151F3258 /* Pods-VoicepediaTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = VoicepediaTests/Info.plist;
@@ -549,6 +699,7 @@
 		};
 		AC1B02111BC9A89200504FDE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B89E9F318785845027CE228C /* Pods-VoicepediaTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = VoicepediaTests/Info.plist;
@@ -561,6 +712,7 @@
 		};
 		AC1B02131BC9A89200504FDE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF64B24914B4DC8BED607BE7 /* Pods-Voicepedia-VoicepediaUITests.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = VoicepediaUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -573,6 +725,7 @@
 		};
 		AC1B02141BC9A89200504FDE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9CEDD74B770226DC70BADD2 /* Pods-Voicepedia-VoicepediaUITests.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = VoicepediaUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
